@@ -7,47 +7,56 @@ public struct VTransform
 	public Vector3 position;
 	public Quaternion rotation;
 }
+
+[CreateAssetMenu (fileName = "vehicle", menuName = "Scriptable Objects/Vehicle")]
+public class VehicleScriptableObject : ScriptableObject
+{
+	public float minSpeed = 20;
+	public float maxSpeed = 30;
+}
+
 public class Vehicle : MonoBehaviour
 {
-	public float speed = 50;
+	public VehicleScriptableObject vehicleSO;
 
 	public bool isMoving;
 	private VTransform _vtransform;
+	private float speed;
 
-	public void Init()
+	public void Init ()
 	{
-		speed = Random.Range(30f, 55f);
+		speed = Random.Range (vehicleSO.minSpeed, vehicleSO.maxSpeed);
 	}
-	void Update()
+	void Update ()
 	{
 		if (!isMoving)
 		{
 			return;
 		}
-		transform.Translate(-transform.forward * Time.deltaTime * speed, Space.World);
+		transform.Translate (-transform.forward * Time.deltaTime * speed, Space.World);
 	}
 
-	public void Move()
+	public void Move ()
 	{
-		transform.gameObject.SetActive(true);
+		transform.gameObject.SetActive (true);
 		isMoving = true;
 		_vtransform.position = transform.localPosition;
 		_vtransform.rotation = transform.localRotation;
 	}
 
-	public void Deactivate()
+	public void Deactivate ()
 	{
 		isMoving = false;
 		transform.localPosition = _vtransform.position;
 		transform.localRotation = _vtransform.rotation;
-		transform.gameObject.SetActive(false);
+		transform.gameObject.SetActive (false);
 	}
 
-	void OnTriggerEnter(Collider col)
+	void OnTriggerEnter (Collider col)
 	{
 		if (col.gameObject.tag == "section/endwall")
 		{
-			Deactivate();
+			Deactivate ();
 		}
 	}
 }

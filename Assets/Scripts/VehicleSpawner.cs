@@ -4,29 +4,27 @@ using UnityEngine;
 
 public class VehicleSpawner : MonoBehaviour
 {
-	public List<Vehicle> vehicles = new List<Vehicle>();
+	public List<Vehicle> vehicles = new List<Vehicle> ();
 
 	private int _index;
 
-	void Start()
+	void Start ()
 	{
 		for (int i = 0; i < transform.childCount; i++)
 		{
-			Vehicle v = transform.GetChild(i).GetComponent<Vehicle>();
-			v.Init();
-			vehicles.Add(v);
+			Vehicle v = transform.GetChild (i).GetComponent<Vehicle> ();
+			v.Init ();
+			vehicles.Add (v);
 		}
 
-		InvokeRepeating("MoveNextVehicle", 1.0f, Random.Range(1f, 3f));
+		InvokeRepeating ("MoveNextVehicle", 1.0f, Random.Range (1f, 3f));
 	}
 
-
-
-	public void MoveNextVehicle()
+	public void MoveNextVehicle ()
 	{
 		if (!vehicles[_index].isMoving)
 		{
-			vehicles[_index].Move();
+			vehicles[_index].Move ();
 		}
 		_index++;
 		if (_index > vehicles.Count - 1)
@@ -34,5 +32,4 @@ public class VehicleSpawner : MonoBehaviour
 			_index = 0;
 		}
 	}
-
 }

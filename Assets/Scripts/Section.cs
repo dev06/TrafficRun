@@ -17,66 +17,63 @@ public class Section : MonoBehaviour
 	private Section _lastSection;
 	private Vector3 _targetPosition;
 
-	public void Init()
+	public void Init ()
 	{
 		_sectionController = SectionController.Instance;
 		_activate = true;
 	}
 
-	void Update()
+	void Update ()
 	{
 		if (!_activate)
 		{
 			return;
 		}
-		//transform.Translate(-Vector3.forward * Time.deltaTime * _sectionController.velocity);
+		//transform.Translate (-Vector3.forward * Time.deltaTime * _sectionController.velocity);
 
-		if (_lastSection != null && transform.GetSiblingIndex() > 0)
-		{
-			_targetPosition = new Vector3(0f, 0f, _lastSection.transform.position.z + _lastSection.length);
-			transform.position = _targetPosition;
-		}
+		// if (_lastSection != null && transform.GetSiblingIndex () > 0)
+		// {
+		// 	_targetPosition = new Vector3 (0f, 0f, _lastSection.transform.position.z + _lastSection.length);
+		// 	transform.position = _targetPosition;
+		// }
 
-		if (hasReachedEnd())
+		if (hasReachedEnd ())
 		{
-			Pool();
+			Pool ();
 			_activate = false;
 		}
 	}
 
-
-	public void Connect(Section s)
+	public void Connect (Section s)
 	{
 		if (_sectionController == null) { _sectionController = SectionController.Instance; }
-		transform.gameObject.SetActive(true);
-		transform.SetParent(_sectionController.transform);
-		transform.position = _targetPosition = s.transform.position + new Vector3(0f, 0f, s.length);
+		transform.gameObject.SetActive (true);
+		transform.SetParent (_sectionController.transform);
+		transform.position = _targetPosition = s.transform.position + new Vector3 (0f, 0f, s.length);
 		_lastSection = s;
 		_activate = true;
 	}
 
-
-
-	private bool hasReachedEnd()
+	private bool hasReachedEnd ()
 	{
 		return transform.position.z < -100;
 	}
 
-	public void Pool()
+	public void Pool ()
 	{
 
-		_sectionController.Pool(this);
-		Hide();
+		_sectionController.Pool (this);
+		Hide ();
 		_activate = false;
 	}
 
-	public void Show()
+	public void Show ()
 	{
-		transform.gameObject.SetActive(true);
+		transform.gameObject.SetActive (true);
 	}
 
-	private void Hide()
+	private void Hide ()
 	{
-		transform.gameObject.SetActive(false);
+		transform.gameObject.SetActive (false);
 	}
 }

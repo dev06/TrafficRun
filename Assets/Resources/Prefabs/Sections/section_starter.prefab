@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 465961396570435832}
   - component: {fileID: 5670128634623531708}
   - component: {fileID: 6992407964956191105}
+  - component: {fileID: 707544081}
   m_Layer: 0
   m_Name: car_red
   m_TagString: section/vehicle
@@ -91,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &6992407964956191105
 BoxCollider:
@@ -106,6 +107,130 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0.0000038146973, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &707544081
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465961396568501816}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!1 &535999284641325596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6886964876502340806}
+  - component: {fileID: 140368620294064804}
+  - component: {fileID: 8267040533021975205}
+  - component: {fileID: 9107696683983115491}
+  - component: {fileID: 5796275121478824039}
+  m_Layer: 0
+  m_Name: road_end
+  m_TagString: section/road_end
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6886964876502340806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535999284641325596}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.2, z: 77.09}
+  m_LocalScale: {x: 10, y: 5, z: 4.592137}
+  m_Children: []
+  m_Father: {fileID: 785063966022181900}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &140368620294064804
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535999284641325596}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &8267040533021975205
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535999284641325596}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!65 &9107696683983115491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535999284641325596}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5796275121478824039
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535999284641325596}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &594404244297941953
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +244,7 @@ GameObject:
   - component: {fileID: 594404244300209409}
   - component: {fileID: 2565744757231400059}
   - component: {fileID: 3795727707427077196}
+  - component: {fileID: 1188410130}
   m_Layer: 0
   m_Name: car_green
   m_TagString: section/vehicle
@@ -197,7 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &3795727707427077196
 BoxCollider:
@@ -212,6 +338,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0.0000038146973, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &1188410130
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594404244297941953}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &790214673813147547
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +367,7 @@ GameObject:
   - component: {fileID: 790214673810952539}
   - component: {fileID: 8592377035568681334}
   - component: {fileID: 3984489373328923459}
+  - component: {fileID: 2117751411}
   m_Layer: 0
   m_Name: car_green
   m_TagString: section/vehicle
@@ -303,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &3984489373328923459
 BoxCollider:
@@ -318,6 +461,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0.0000038146973, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &2117751411
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790214673813147547}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1316562169587842072
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +490,7 @@ GameObject:
   - component: {fileID: 1316562169590096600}
   - component: {fileID: 4133136742966026261}
   - component: {fileID: 3066920169518401556}
+  - component: {fileID: 572336313}
   m_Layer: 0
   m_Name: car_green
   m_TagString: section/vehicle
@@ -409,7 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &3066920169518401556
 BoxCollider:
@@ -424,6 +584,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &572336313
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316562169587842072}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1399712472491976218
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,6 +613,7 @@ GameObject:
   - component: {fileID: 1399712472494242010}
   - component: {fileID: 4317037676405015476}
   - component: {fileID: 6877290429905540644}
+  - component: {fileID: 658380980}
   m_Layer: 0
   m_Name: car_blue
   m_TagString: section/vehicle
@@ -515,7 +692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &6877290429905540644
 BoxCollider:
@@ -530,6 +707,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0.0000038146973, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &658380980
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399712472491976218}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1785623457373980875
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,6 +736,7 @@ GameObject:
   - component: {fileID: 1785623457371985419}
   - component: {fileID: 7350913067317193259}
   - component: {fileID: 2054242228327322540}
+  - component: {fileID: 110632793}
   m_Layer: 0
   m_Name: car_blue
   m_TagString: section/vehicle
@@ -621,7 +815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &2054242228327322540
 BoxCollider:
@@ -636,6 +830,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0.0000038146973, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &110632793
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785623457373980875}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &2116606840887764070
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,6 +859,7 @@ GameObject:
   - component: {fileID: 2116606840889703078}
   - component: {fileID: 3825051892421734811}
   - component: {fileID: 1635932509904788663}
+  - component: {fileID: 1179165334}
   m_Layer: 0
   m_Name: car_red
   m_TagString: section/vehicle
@@ -727,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &1635932509904788663
 BoxCollider:
@@ -742,6 +953,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0.0000038146973, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &1179165334
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116606840887764070}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &2161146293505137933
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,6 +979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4157051072884451693}
   - component: {fileID: 8221483045573531390}
+  - component: {fileID: 474618218}
   m_Layer: 0
   m_Name: End (1)
   m_TagString: section/endwall
@@ -766,12 +994,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2161146293505137933}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -100.9, y: 2.88, z: 55}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -104.4, y: 2.88, z: 55}
   m_LocalScale: {x: 5, y: 10, z: 35}
   m_Children: []
-  m_Father: {fileID: 4427688832633101583}
-  m_RootOrder: 3
+  m_Father: {fileID: 785063966022181900}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8221483045573531390
 BoxCollider:
@@ -786,6 +1014,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &474618218
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2161146293505137933}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &3586696047814257143
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,8 +1154,7 @@ Transform:
   m_Children:
   - {fileID: 1737055810180768006}
   - {fileID: 4187137860147970396}
-  - {fileID: 4436628910376234498}
-  - {fileID: 4157051072884451693}
+  - {fileID: 785063966022181900}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -955,8 +1198,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5766177314336833501}
-  m_LocalRotation: {x: -0, y: -0.70710605, z: -0, w: 0.7071076}
-  m_LocalPosition: {x: -98.1, y: -0.182, z: 55.2}
+  m_LocalRotation: {x: -0, y: 0.7071055, z: -0, w: 0.7071081}
+  m_LocalPosition: {x: 91.31, y: -0.182, z: 55.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1785623457374278891}
@@ -964,7 +1207,7 @@ Transform:
   - {fileID: 465961396568666648}
   m_Father: {fileID: 4187137860147970396}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
 --- !u!114 &4399108596557896989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1033,6 +1276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4436628910376234498}
   - component: {fileID: 8940998860937271395}
+  - component: {fileID: 1040398799}
   m_Layer: 0
   m_Name: End
   m_TagString: section/endwall
@@ -1047,12 +1291,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6685465020052638228}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 101.09, y: 2.88, z: 55}
   m_LocalScale: {x: 5, y: 10, z: 35}
   m_Children: []
-  m_Father: {fileID: 4427688832633101583}
-  m_RootOrder: 2
+  m_Father: {fileID: 785063966022181900}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8940998860937271395
 BoxCollider:
@@ -1067,6 +1311,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1040398799
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6685465020052638228}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &7443720153329065423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,6 +1392,39 @@ Transform:
   m_Father: {fileID: 4427688832633101583}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7934338230405746875
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 785063966022181900}
+  m_Layer: 0
+  m_Name: Triggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &785063966022181900
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7934338230405746875}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4436628910376234498}
+  - {fileID: 4157051072884451693}
+  - {fileID: 6886964876502340806}
+  m_Father: {fileID: 4427688832633101583}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8122971643007960278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1438,7 @@ GameObject:
   - component: {fileID: 8122971643009899030}
   - component: {fileID: 2031657480879605607}
   - component: {fileID: 4687595706819225812}
+  - component: {fileID: 327842733}
   m_Layer: 0
   m_Name: car_blue
   m_TagString: section/vehicle
@@ -1223,7 +1517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &4687595706819225812
 BoxCollider:
@@ -1238,6 +1532,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &327842733
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8122971643007960278}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &8411693941846813609
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,6 +1688,7 @@ GameObject:
   - component: {fileID: 9196985422254369235}
   - component: {fileID: 4545728951007553503}
   - component: {fileID: 3961613179345512881}
+  - component: {fileID: 1711282311}
   m_Layer: 0
   m_Name: car_red
   m_TagString: section/vehicle
@@ -1456,7 +1767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba1d4c693d31e74ab7a80e101f5ff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  vehicleSO: {fileID: 11400000, guid: 2431a10f06d654a24bae7e6e63ccce57, type: 2}
   isMoving: 0
 --- !u!65 &3961613179345512881
 BoxCollider:
@@ -1471,6 +1782,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.159403, y: 2.5180607, z: 5.3236613}
   m_Center: {x: 0, y: 1.2608719, z: -0.0000014305118}
+--- !u!54 &1711282311
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196985422252111635}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &2213241283225028596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1683,10 +2010,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (16)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -1738,6 +2061,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (16)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -1896,10 +2223,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (17)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -105
@@ -1951,6 +2274,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (17)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -2172,10 +2499,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (15)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -105
@@ -2228,6 +2551,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.50000024
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (15)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
 --- !u!4 &4427688832069420876 stripped
@@ -2243,10 +2570,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (25)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.80002
@@ -2299,6 +2622,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.50000024
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (25)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
 --- !u!4 &4427688832113361078 stripped
@@ -2314,10 +2641,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (12)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 105
@@ -2369,6 +2692,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -2456,10 +2783,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (44)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -2511,6 +2834,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.50000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (44)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -2598,10 +2925,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (24)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 105
@@ -2653,6 +2976,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (24)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -2740,10 +3067,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (10)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -2795,6 +3118,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -2953,10 +3280,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (11)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -105
@@ -3008,6 +3331,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.50000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -3091,10 +3418,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (13)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -3146,6 +3469,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.50000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (13)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -3229,10 +3556,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -3284,6 +3607,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.50000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
@@ -3442,10 +3769,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -3498,6 +3821,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.50000024
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
 --- !u!4 &4427688833115183415 stripped
@@ -3513,10 +3840,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (45)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -3569,6 +3892,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.50000024
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (45)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
 --- !u!4 &4427688833226120930 stripped
@@ -3584,10 +3911,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (26)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 104.8
@@ -3640,6 +3963,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (26)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
 --- !u!4 &4427688833327170186 stripped
@@ -3655,10 +3982,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (14)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -3711,6 +4034,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (14)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
 --- !u!4 &4427688833376859859 stripped
@@ -3726,10 +4053,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1737055810180768006}
     m_Modifications:
-    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
-      propertyPath: m_Name
-      value: road_straight_clear_mesh (27)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -3781,6 +4104,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}
+      propertyPath: m_Name
+      value: road_straight_clear_mesh (27)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d153a8045fa3a8143b860fc787040f99, type: 3}

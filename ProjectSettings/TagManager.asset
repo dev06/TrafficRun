@@ -6,6 +6,7 @@ TagManager:
   tags:
   - section/endwall
   - section/vehicle
+  - section/road_end
   layers:
   - Default
   - TransparentFX
