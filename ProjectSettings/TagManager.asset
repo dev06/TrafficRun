@@ -7,6 +7,10 @@ TagManager:
   - section/endwall
   - section/vehicle
   - section/road_end
+  - section/road_start
+  - section/point_trigger
+  - section/finish
+  - section/endconnector
   layers:
   - Default
   - TransparentFX

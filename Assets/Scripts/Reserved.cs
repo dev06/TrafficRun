@@ -22,7 +22,7 @@ public class Reserved : MonoBehaviour
 				return s;
 				_breakCounter = 0;
 			}
-		} while (s.type != type);
+		} while (s.type != type || s.exclude);
 
 		return s;
 	}

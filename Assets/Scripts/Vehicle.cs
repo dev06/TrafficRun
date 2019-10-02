@@ -25,7 +25,7 @@ public class Vehicle : MonoBehaviour
 
 	public void Init ()
 	{
-		speed = Random.Range (vehicleSO.minSpeed, vehicleSO.maxSpeed);
+		speed = Random.Range(25f, 27f);
 	}
 	void Update ()
 	{

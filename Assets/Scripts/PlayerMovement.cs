@@ -4,24 +4,106 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 40; 
+    public float maxVelocity = 100;
+    public float onHoldBrakePower = 800;
+    public float frictionBrake = 100;
+    private SectionController _sectionController;
+    private bool _flicked;
+    private float _flickTimer;
+    private int _flickCount;
+    void Start()
+    {
+        _sectionController = SectionController.Instance;
+    }
+
+
     void OnEnable ()
     {
         FlickInput.OnFlick += OnFlick;
+        EventManager.OnSectionTriggerHit += OnSectionTriggerHit;
+        EventManager.OnGameEvent += OnGameEvent;
     }
 
     void OnDisable ()
     {
         FlickInput.OnFlick -= OnFlick;
-    }
-    void OnFlick ()
-    {
-        Debug.Log ("Flick");
+        EventManager.OnSectionTriggerHit -= OnSectionTriggerHit;
+        EventManager.OnGameEvent -= OnGameEvent;
     }
 
-    // Update is called once per frame
-    void Update ()
+    void OnFlick ()
     {
-      // transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.World); 
+        _sectionController.Velocity += maxVelocity;
+        _flicked = true;
+        _flickCount++;
+    }
+
+    void OnSectionTriggerHit()
+    {
+        //StopCoroutine("IBrake");
+        //StartCoroutine("IBrake");
+    }
+
+    void OnGameEvent(EventID id)
+    {
+        switch (id)
+        {
+            case EventID.FINISH:
+            {
+                CameraController.Instance.Detach();
+                _sectionController.Velocity = 0;
+
+                UIController.Instance.ShowPage(PageType.Complete);
+                StartCoroutine("ITranslate");
+                break;
+            }
+        }
+    }
+
+    IEnumerator ITranslate()
+    {
+        if (EventManager.OnComplete != null)
+        {
+            EventManager.OnComplete("level", LevelController.Instance.Level, LevelController.Instance.Zone);
+        }
+        float timer = 0f;
+        while (timer < 3f)
+        {
+            transform.Translate(Vector3.forward * Time.deltaTime * maxVelocity, Space.World);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
+
+    }
+
+    void Update()
+    {
+        if (_flicked)
+        {
+            _flickTimer += Time.deltaTime;
+            if (_flickTimer > 2f)
+            {
+                _flickTimer = 0;
+                _flicked = false;
+                _flickCount = 0;
+            }
+        }
+        if (FlickInput.IS_HOLDING || !_flicked)
+        {
+            _sectionController.Velocity -= Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
+        }
+        _sectionController.Velocity = Mathf.Clamp(_sectionController.velocity, 0f, maxVelocity);
+    }
+
+    IEnumerator IBrake()
+    {
+        while (_sectionController.Velocity > 0)
+        {
+            _sectionController.Velocity -= Time.deltaTime * onHoldBrakePower;
+            yield return null;
+        }
     }
 }

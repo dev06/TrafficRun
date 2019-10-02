@@ -7,6 +7,7 @@ public class VehicleSpawner : MonoBehaviour
 	public List<Vehicle> vehicles = new List<Vehicle> ();
 
 	private int _index;
+	private Section _parentSection;
 
 	void Start ()
 	{
@@ -17,7 +18,7 @@ public class VehicleSpawner : MonoBehaviour
 			vehicles.Add (v);
 		}
 
-		InvokeRepeating ("MoveNextVehicle", 1.0f, Random.Range (1f, 3f));
+		_parentSection = GetComponentInParent<Section>();
 	}
 
 	public void MoveNextVehicle ()
@@ -30,6 +31,21 @@ public class VehicleSpawner : MonoBehaviour
 		if (_index > vehicles.Count - 1)
 		{
 			_index = 0;
+		}
+	}
+
+	public void Activate()
+	{
+		InvokeRepeating ("MoveNextVehicle", Random.value, Random.Range (1f, 3f));
+	}
+
+	public void Deactivate()
+	{
+		CancelInvoke("MoveNextVehicle");
+
+		for (int i = 0; i < vehicles.Count; i++)
+		{
+			vehicles[i].Deactivate();
 		}
 	}
 }

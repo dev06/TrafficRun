@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class FlickInput : MonoBehaviour
 {
-    public delegate void Flick ();
-    public static event Flick OnFlick;
+    public delegate void GameInput ();
+    public static event GameInput OnFlick;
+
+    public static bool IS_HOLDING;
 
     [Tooltip("Time in seconds Down and Up has to get called")]
-    public float swipeCounterThreshold = .5f; 
+    public float swipeCounterThreshold = .5f;
     [Tooltip("Magnitude of the flick")]
     public float swipeThreshold = .1f;
     private Vector3 _pointerDown;
     private Vector3 _pointerCurrent;
     private Vector3 _pointerUp;
     private float _flickTimer;
+    private float _holdTimer;
+
+    void Start()
+    {
+        IS_HOLDING = false;
+    }
 
     void Update ()
     {
@@ -27,16 +35,23 @@ public class FlickInput : MonoBehaviour
         {
             _pointerCurrent = Camera.main.ScreenToViewportPoint (Input.mousePosition);
             _flickTimer += Time.deltaTime;
+            _holdTimer += Time.deltaTime;
+            if (_holdTimer > .05f)
+            {
+                IS_HOLDING = true;
+            }
         }
 
         if (Input.GetMouseButtonUp (0))
         {
             _pointerUp = Camera.main.ScreenToViewportPoint (Input.mousePosition);
-
+            IS_HOLDING = false;
+            _holdTimer = 0f;
             Vector3 _delta = _pointerUp - _pointerDown;
             if (_delta.magnitude > swipeThreshold)
             {
-                if (_delta.y > 0f && Mathf.Abs (_delta.y) > Mathf.Abs (_delta.x) && _flickTimer < swipeCounterThreshold)
+
+                if (_delta.y > 0f && Mathf.Abs (_delta.y) > Mathf.Abs (_delta.x * .35f))
                 {
                     if (OnFlick != null)
                     {
