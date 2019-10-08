@@ -7,6 +7,8 @@ public enum EventID
 	FINISH,
 	ZONE_COMPLETE,
 	LEVEL_COMPLETE,
+	VEHICLE_HIT,
+	NEAR_MISS,
 }
 public class EventManager : MonoBehaviour
 {

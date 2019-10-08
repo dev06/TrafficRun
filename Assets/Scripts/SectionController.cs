@@ -10,7 +10,6 @@ public class SectionController : MonoBehaviour
 	public List<Section> sections = new List<Section> ();
 	public Reserved reserved;
 
-
 	private int remaining = 4;
 
 	void Awake ()
@@ -53,12 +52,12 @@ public class SectionController : MonoBehaviour
 			s.Deactivate();
 		} while (transform.childCount > 0);
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 7; i++)
 		{
 			Section _sectionToAdd = null;
 			if (i == 0)
 			{
-				_sectionToAdd = reserved.GetSectionInReservedByType(SectionType.STARTER);
+				_sectionToAdd = reserved.GetSectionInReservedByType(SectionType.NO_LANE);
 				_sectionToAdd.Init();
 				_sectionToAdd.transform.position = Vector3.zero;
 				_sectionToAdd.transform.SetParent(transform);
@@ -67,7 +66,13 @@ public class SectionController : MonoBehaviour
 			}
 
 			Section _last = transform.GetChild (transform.childCount - 1).GetComponent<Section> (); // gets the last section in list
-			_sectionToAdd = reserved.GetSectionInReservedByType(SectionType.LANE);
+			if (_last.type != SectionType.NO_LANE)
+			{
+				_sectionToAdd = reserved.GetSectionInReservedByType (SectionType.NO_LANE);
+			} else
+			{
+				_sectionToAdd = reserved.GetSectionInReservedByType(getLane(), getTrafficIntensity());
+			}
 			_sectionToAdd.Init ();
 			_sectionToAdd.Connect (_last);
 		}
@@ -92,7 +97,7 @@ public class SectionController : MonoBehaviour
 			}
 			else
 			{
-				_reserved = reserved.GetSectionInReservedByType (SectionType.LANE); //gets random section from reserved list
+				_reserved = reserved.GetSectionInReservedByType (getLane(), getTrafficIntensity()); //gets random section from reserved list
 			}
 		}
 		if (remaining >= 0)
@@ -108,5 +113,44 @@ public class SectionController : MonoBehaviour
 	{
 		get {return velocity; }
 		set { this.velocity = value; }
+	}
+
+	private SectionType getLane()
+	{
+		int _zone = LevelController.Instance.Zone;
+		switch (_zone)
+		{
+			case 4:
+			{
+				return SectionType.NO_LANE;
+			}
+		}
+
+		return SectionType.LANE;
+	}
+
+
+	private TrafficIntensity getTrafficIntensity()
+	{
+		int _zone = LevelController.Instance.Zone;
+		switch (_zone)
+		{
+			case 1:
+			{
+				return TrafficIntensity.LIGHT;
+			}
+			case 2:
+			{
+				float _p = Random.value;
+				return _p < .5f ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT;
+			}
+
+			case 3:
+			{
+				float _p = Random.value;
+				return _p < .5f ? TrafficIntensity.HEAVY : ((Random.value < .5f) ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT);
+			}
+		}
+		return TrafficIntensity.NONE;
 	}
 }

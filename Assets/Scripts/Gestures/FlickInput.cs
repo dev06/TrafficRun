@@ -26,6 +26,7 @@ public class FlickInput : MonoBehaviour
 
     void Update ()
     {
+        if (GameController.Instance.Player.isAlive == false) { return; }
         if (Input.GetMouseButtonDown (0))
         {
             _pointerDown = Camera.main.ScreenToViewportPoint (Input.mousePosition);

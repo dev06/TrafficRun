@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//1 = 5, 7, 10
-//2 = 10,15,20,
-//3 = 20,25,30
+//1 = 5, 7
+//2 = 10,15
+//3 = 20,25
 public class PointDisplay : MonoBehaviour
 {
 	private List<Animation> animations = new List<Animation>();

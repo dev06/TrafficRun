@@ -11,6 +11,7 @@ TagManager:
   - section/point_trigger
   - section/finish
   - section/endconnector
+  - vehicle/nearMiss
   layers:
   - Default
   - TransparentFX

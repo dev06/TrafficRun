@@ -7,6 +7,10 @@ public class PlayerMovement : MonoBehaviour
     public float maxVelocity = 100;
     public float onHoldBrakePower = 800;
     public float frictionBrake = 100;
+    public ParticleSystem fx_explosion;
+    public bool isAlive = true;
+
+
     private SectionController _sectionController;
     private bool _flicked;
     private float _flickTimer;
@@ -57,7 +61,22 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine("ITranslate");
                 break;
             }
+            case EventID.VEHICLE_HIT:
+            {
+                isAlive = false;
+                _sectionController.Velocity = 0;
+                fx_explosion.Play();
+                StartCoroutine("IRestart");
+                break;
+            }
         }
+    }
+
+    IEnumerator IRestart()
+    {
+        yield return new WaitForSecondsRealtime(4f);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
     }
 
     IEnumerator ITranslate()
@@ -81,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive) { return; }
         if (_flicked)
         {
             _flickTimer += Time.deltaTime;

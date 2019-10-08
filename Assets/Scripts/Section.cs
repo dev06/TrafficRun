@@ -9,11 +9,21 @@ public enum SectionType
 	NO_LANE,
 	FINISH,
 }
+
+public enum TrafficIntensity
+{
+	NONE,
+	LIGHT,
+	MEDIUM,
+	HEAVY,
+}
 public class Section : MonoBehaviour
 {
 	public SectionType type;
-	public int length;
+	public TrafficIntensity trafficIntensity;
 	public bool exclude;
+	public Transform propSets;
+
 	private SectionController _sectionController;
 	private bool _activate;
 	private Section _lastSection;
@@ -55,6 +65,10 @@ public class Section : MonoBehaviour
 	{
 		transform.gameObject.SetActive (true);
 		transform.SetParent (_sectionController.transform);
+		if (propSets != null)
+		{
+			propSets.transform.GetChild(Random.Range(0, propSets.childCount)).gameObject.SetActive(true);
+		}
 		_activate = true;
 		foreach (VehicleSpawner v in _vehicleSpawners)
 		{
@@ -111,5 +125,13 @@ public class Section : MonoBehaviour
 	public void Hide ()
 	{
 		transform.gameObject.SetActive (false);
+		if (propSets != null)
+		{
+			for (int i = 0; i < propSets.childCount; i++)
+			{
+				propSets.GetChild(i).gameObject.SetActive(false);
+			}
+
+		}
 	}
 }

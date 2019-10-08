@@ -13,6 +13,8 @@ public class LevelController : MonoBehaviour
 
 	public LevelDisplay levelDisplay;
 	public CompletePage completePage;
+
+
 	void Awake()
 	{
 		if (Instance == null)
@@ -31,10 +33,15 @@ public class LevelController : MonoBehaviour
 		EventManager.OnComplete -= OnComplete;
 	}
 
-	void Start()
+	public void Load()
 	{
 		Level = PlayerPrefs.HasKey("LEVEL") ? PlayerPrefs.GetInt("LEVEL") : 1;
 		Zone = PlayerPrefs.HasKey("ZONE") ? PlayerPrefs.GetInt("ZONE") : 1;
+	}
+
+	void Start()
+	{
+
 
 		levelDisplay.UpdateData(Level, Zone);
 	}
