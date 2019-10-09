@@ -21,5 +21,6 @@ public class EventManager : MonoBehaviour
 	public delegate void LevelControllerEvents(string _id, int level, int zone);
 	public static LevelControllerEvents OnComplete;
 
-
+	public delegate void StateEvents(State s);
+	public static StateEvents OnStateChange;
 }

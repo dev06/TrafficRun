@@ -36,7 +36,7 @@ public class VehicleSpawner : MonoBehaviour
 
 	public void Activate()
 	{
-		InvokeRepeating ("MoveNextVehicle", Random.Range(0f, 5f), Random.Range (2f, 3f));
+		InvokeRepeating ("MoveNextVehicle", Random.value, Random.Range (1f, 15f));
 	}
 
 	public void Deactivate()

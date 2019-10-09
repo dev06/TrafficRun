@@ -28,28 +28,28 @@ public class SectionController : MonoBehaviour
 		for (int i = 0; i < transform.childCount; i++)
 		{
 			Section s = transform.GetChild (i).GetComponent<Section> ();
-			s.Init();
+			s.Init ();
 			if (i > 0)
 			{
 				Section _previous = transform.GetChild (i - 1).GetComponent<Section> ();
-				s.SetLastSection(_previous);
-				s.SetToLastSectionPosition();
+				s.SetLastSection (_previous);
+				s.SetToLastSectionPosition ();
 			}
 		}
 	}
 
 	void Start ()
 	{
-		GenerateInitialRoad();
+		GenerateInitialRoad ();
 	}
 
-	public void GenerateInitialRoad()
+	public void GenerateInitialRoad ()
 	{
 		do
 		{
-			Section s = transform.GetChild(0).GetComponent<Section>();
-			s.transform.SetParent(reserved.transform);
-			s.Deactivate();
+			Section s = transform.GetChild (0).GetComponent<Section> ();
+			s.transform.SetParent (reserved.transform);
+			s.Deactivate ();
 		} while (transform.childCount > 0);
 
 		for (int i = 0; i < 7; i++)
@@ -57,11 +57,11 @@ public class SectionController : MonoBehaviour
 			Section _sectionToAdd = null;
 			if (i == 0)
 			{
-				_sectionToAdd = reserved.GetSectionInReservedByType(SectionType.NO_LANE);
-				_sectionToAdd.Init();
+				_sectionToAdd = reserved.GetSectionInReservedByType (SectionType.NO_LANE);
+				_sectionToAdd.Init ();
 				_sectionToAdd.transform.position = Vector3.zero;
-				_sectionToAdd.transform.SetParent(transform);
-				_sectionToAdd.Activate();
+				_sectionToAdd.transform.SetParent (transform);
+				_sectionToAdd.Activate ();
 				continue;
 			}
 
@@ -69,27 +69,27 @@ public class SectionController : MonoBehaviour
 			if (_last.type != SectionType.NO_LANE)
 			{
 				_sectionToAdd = reserved.GetSectionInReservedByType (SectionType.NO_LANE);
-			} else
+			}
+			else
 			{
-				_sectionToAdd = reserved.GetSectionInReservedByType(getLane(), getTrafficIntensity());
+				_sectionToAdd = reserved.GetSectionInReservedByType (getLane (), getTrafficIntensity ());
 			}
 			_sectionToAdd.Init ();
 			_sectionToAdd.Connect (_last);
 		}
 	}
 
-
-
 	public void Pool (Section _deactiveSection)
 	{
-		if (transform.childCount < 1) {return; }
+		if (transform.childCount < 1) { return; }
 		Section _last = transform.GetChild (transform.childCount - 1).GetComponent<Section> (); // gets the last section in list
 		Section _reserved = null;
 
 		if (remaining <= 0)
 		{
-			_reserved =  reserved.GetSectionInReservedByType (SectionType.FINISH);
-		} else
+			_reserved = reserved.GetSectionInReservedByType (SectionType.FINISH);
+		}
+		else
 		{
 			if (_last.type != SectionType.NO_LANE && remaining >= 1)
 			{
@@ -97,59 +97,61 @@ public class SectionController : MonoBehaviour
 			}
 			else
 			{
-				_reserved = reserved.GetSectionInReservedByType (getLane(), getTrafficIntensity()); //gets random section from reserved list
+				_reserved = reserved.GetSectionInReservedByType (getLane (), getTrafficIntensity ()); //gets random section from reserved list
 			}
 		}
 		if (remaining >= 0)
 		{
 			_reserved.Init ();
 			_reserved.Connect (_last);
-			remaining--;
+			if (GameController.Instance.infiniteLevel == false)
+			{
+				remaining--;
+			}
 		}
 		_deactiveSection.transform.SetParent (reserved.transform);
 	}
 
 	public float Velocity
 	{
-		get {return velocity; }
+		get { return velocity; }
 		set { this.velocity = value; }
 	}
 
-	private SectionType getLane()
+	private SectionType getLane ()
 	{
 		int _zone = LevelController.Instance.Zone;
 		switch (_zone)
 		{
 			case 4:
-			{
-				return SectionType.NO_LANE;
-			}
+				{
+					return SectionType.NO_LANE;
+				}
 		}
 
 		return SectionType.LANE;
 	}
 
-
-	private TrafficIntensity getTrafficIntensity()
+	private TrafficIntensity getTrafficIntensity ()
 	{
 		int _zone = LevelController.Instance.Zone;
 		switch (_zone)
 		{
 			case 1:
-			{
-				return TrafficIntensity.LIGHT;
-			}
+				{
+					return TrafficIntensity.LIGHT;
+				}
 			case 2:
-			{
-				float _p = Random.value;
-				return _p < .5f ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT;
-			}
+				{
+					float _p = Random.value;
+					return _p < .5f ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT;
+				}
 
 			case 3:
-			{
-				float _p = Random.value;
-				return _p < .5f ? TrafficIntensity.HEAVY : ((Random.value < .5f) ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT);
-			}
+				{
+					float _p = Random.value;
+					return _p < .5f ? TrafficIntensity.HEAVY : ((Random.value < .5f) ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT);
+				}
 		}
 		return TrafficIntensity.NONE;
 	}
