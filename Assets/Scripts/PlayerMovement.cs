@@ -10,12 +10,19 @@ public class PlayerMovement : MonoBehaviour
     public ParticleSystem fx_explosion;
     public bool isAlive = true;
 
+    [Header("Fields")]
+    public ProgressMeter furyMeter;
+
     private SectionController _sectionController;
-    private bool _flicked;
+    private bool _flicked, _furyAchieved, _inProtection;
     private float _flickTimer;
     private int _flickCount;
+
+    private float _fury;
+    private float _furyDepletionRate;
     void Start ()
     {
+        FuryAchieved = false;
         _sectionController = SectionController.Instance;
     }
 
@@ -30,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     void OnDisable ()
     {
         FlickInput.OnFlick -= OnFlick;
-        FlickInput.OnDown += OnDown;
+        FlickInput.OnDown -= OnDown;
         EventManager.OnSectionTriggerHit -= OnSectionTriggerHit;
         EventManager.OnGameEvent -= OnGameEvent;
     }
@@ -43,18 +50,26 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void OnDown ()
-    {   
-        if(GameController.Instance.state != State.Game)
+    {
+        if (GameController.Instance.state != State.Game)
         {
-            GameController.Instance.SetState(State.Game); 
+            GameController.Instance.SetState(State.Game);
         }
-        CameraController.Instance.SetPosition (-Vector3.forward);
+
+        if (!FuryAchieved)
+        {
+            CameraController.Instance.SetPosition (-Vector3.forward);
+        }
     }
 
     void OnSectionTriggerHit ()
     {
         //StopCoroutine("IBrake");
         //StartCoroutine("IBrake");
+        if (!_furyAchieved)
+        {
+            Fury += .08f;
+        }
     }
 
     void OnGameEvent (EventID id)
@@ -62,22 +77,34 @@ public class PlayerMovement : MonoBehaviour
         switch (id)
         {
             case EventID.FINISH:
-                {
-                    CameraController.Instance.Detach ();
-                    _sectionController.Velocity = 0;
+            {
+                CameraController.Instance.Detach ();
+                _sectionController.Velocity = 0;
 
-                    UIController.Instance.ShowPage (PageType.Complete);
-                    StartCoroutine ("ITranslate");
-                    break;
-                }
+                UIController.Instance.ShowPage (PageType.Complete);
+                StartCoroutine ("ITranslate");
+                break;
+            }
             case EventID.VEHICLE_HIT:
-                {
-                    isAlive = false;
-                    _sectionController.Velocity = 0;
-                    fx_explosion.Play ();
-                    StartCoroutine ("IRestart");
-                    break;
-                }
+            {
+                isAlive = false;
+                _sectionController.Velocity = 0;
+                Fury = 0;
+                fx_explosion.Play ();
+                StartCoroutine ("IRestart");
+                break;
+            }
+
+            case EventID.FURY_START:
+            {
+                CameraController.Instance.SetPosition(-Vector3.forward);
+                break;
+            }
+
+            case EventID.FURY_END:
+            {
+                break;
+            }
         }
     }
 
@@ -120,20 +147,35 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (FlickInput.IS_HOLDING)
+        float _mult = .15f;
+        Fury -= Time.deltaTime * _mult;
+
+
+        if (!_furyAchieved)
         {
-            _sectionController.Velocity += Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
-        }
-        else
+            if (FlickInput.IS_HOLDING)
+            {
+                _sectionController.Velocity += Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
+            }
+            else
+            {
+                _sectionController.Velocity -= Time.deltaTime * (frictionBrake);
+            }
+            _sectionController.Velocity = Mathf.Clamp (_sectionController.velocity, 0f, maxVelocity);
+        } else
         {
-            _sectionController.Velocity -= Time.deltaTime * (frictionBrake);
+            _sectionController.Velocity += Time.deltaTime *  onHoldBrakePower;
+            _sectionController.Velocity = Mathf.Clamp (_sectionController.velocity, 0f, maxVelocity * 1.5f);
         }
 
-        // if (FlickInput.IS_HOLDING || !_flicked)
-        // {
-        //     _sectionController.Velocity -= Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
-        // }
-        _sectionController.Velocity = Mathf.Clamp (_sectionController.velocity, 0f, maxVelocity);
+
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Fury = 1f;
+        }
+
+        furyMeter.fill = Fury;
     }
 
     IEnumerator IBrake ()
@@ -143,5 +185,60 @@ public class PlayerMovement : MonoBehaviour
             _sectionController.Velocity -= Time.deltaTime * onHoldBrakePower;
             yield return null;
         }
+    }
+
+    public float Fury
+    {
+        get
+        {
+            return _fury;
+        }
+        set {
+            _fury = value;
+            _fury = Mathf.Clamp(_fury, 0f, 1f);
+            furyMeter.fill = _fury;
+            if (_fury <= 0f && FuryAchieved)
+            {
+                if (EventManager.OnGameEvent != null)
+                {
+                    EventManager.OnGameEvent(EventID.FURY_END);
+                }
+                StartCoroutine("IEnterProtection");
+                FuryAchieved = false;
+            }
+
+            if (_fury >= .99f && !FuryAchieved)
+            {
+                if (EventManager.OnGameEvent != null)
+                {
+                    EventManager.OnGameEvent(EventID.FURY_START);
+                }
+                EnableProtection = true;
+                FuryAchieved = true;
+            }
+        }
+    }
+
+    IEnumerator IEnterProtection()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        EnableProtection = false;
+        if (EventManager.OnGameEvent != null)
+        {
+            EventManager.OnGameEvent(EventID.PROTECTION_END);
+        }
+        StopCoroutine("IEnterProtection");
+    }
+
+    public bool EnableProtection
+    {
+        get {return _inProtection;}
+        set {_inProtection = value; }
+    }
+
+    public bool FuryAchieved
+    {
+        get {return _furyAchieved; }
+        set {_furyAchieved = value; }
     }
 }

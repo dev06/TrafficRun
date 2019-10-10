@@ -9,6 +9,9 @@ public enum EventID
 	LEVEL_COMPLETE,
 	VEHICLE_HIT,
 	NEAR_MISS,
+	FURY_START,
+	FURY_END,
+	PROTECTION_END,
 }
 public class EventManager : MonoBehaviour
 {

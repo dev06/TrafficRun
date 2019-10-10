@@ -4,11 +4,27 @@ using UnityEngine;
 
 public class PlayerModel : MonoBehaviour
 {
-	public ParticleSystem fx_fire, fx_thrust_one, fx_thrust_two;
+	public GameObject fx_shield;
+	public ParticleSystem fx_fire, fx_shield_wind, fx_shield_par;
+	public ParticleSystem[] fx_thrust_regular, fx_thrust_fury;
 	private MeshRenderer _mesh;
 	private Collider _collider;
 	private Rigidbody _rigidbody;
 	private bool _vehicleHit;
+
+
+	void OnEnable ()
+	{
+		EventManager.OnGameEvent += OnGameEvent;
+	}
+
+	void OnDisable ()
+	{
+		EventManager.OnGameEvent -= OnGameEvent;
+	}
+
+
+
 	void Start ()
 	{
 		_rigidbody = GetComponent<Rigidbody> ();
@@ -16,6 +32,39 @@ public class PlayerModel : MonoBehaviour
 		_mesh = GetComponent<MeshRenderer> ();
 	}
 
+	void OnGameEvent(EventID id)
+	{
+		switch (id)
+		{
+			case EventID.FURY_START:
+			{
+
+				ToggleFXFury(fx_thrust_fury, true);
+				ToggleFXFury(fx_thrust_regular, false);
+				fx_shield_wind.Play();
+				fx_shield_par.Play();
+				fx_shield.SetActive(true);
+				fx_shield.GetComponent<MeshRenderer>().enabled = true;
+				break;
+			}
+			case EventID.FURY_END:
+			{
+				ToggleFXFury(fx_thrust_fury, false);
+				fx_shield.transform.GetComponent<Animation>().Play();
+				fx_shield_wind.Stop();
+				fx_shield_par.Stop();
+				break;
+			}
+
+			case EventID.PROTECTION_END:
+			{
+				fx_shield.SetActive(false);
+				break;
+			}
+
+		}
+	}
+	bool isPlaying;
 	void OnTriggerEnter (Collider col)
 	{
 		if (col.gameObject.tag == "section/point_trigger")
@@ -34,34 +83,46 @@ public class PlayerModel : MonoBehaviour
 			}
 		}
 
-		if (col.gameObject.tag == "section/vehicle")
+		if (!GameController.Instance.Player.EnableProtection)
 		{
-			if (_mesh.enabled && GameController.Instance.debug == false)
+			isPlaying = false;
+			if (col.gameObject.tag == "section/vehicle")
 			{
-				if (EventManager.OnGameEvent != null)
+				if (_mesh.enabled && GameController.Instance.debug == false)
 				{
-					EventManager.OnGameEvent (EventID.VEHICLE_HIT);
+					if (EventManager.OnGameEvent != null)
+					{
+						EventManager.OnGameEvent (EventID.VEHICLE_HIT);
+					}
+					_vehicleHit = true;
+					fx_fire.Play ();
+					_rigidbody.isKinematic = false;
+					_rigidbody.AddForce (Vector3.up * 500f, ForceMode.Force);
+					_rigidbody.AddTorque (new Vector3 (Random.value, Random.value, Random.value) * 2000f);
 				}
-				_vehicleHit = true;
-				fx_fire.Play ();
-				_rigidbody.isKinematic = false;
-				_rigidbody.AddForce (Vector3.up * 500f, ForceMode.Force);
-				_rigidbody.AddTorque (new Vector3 (Random.value, Random.value, Random.value) * 2000f);
+				//_mesh.enabled = _collider.enabled = false;
 			}
-			//_mesh.enabled = _collider.enabled = false;
-		}
-		else
+		} else
 		{
-			if (col.gameObject.tag == "vehicle/nearMiss")
+			if (col.gameObject.tag == "section/vehicle")
 			{
-				//			Debug.Log("Hit");
-				if (EventManager.OnGameEvent != null)
-				{
-					EventManager.OnGameEvent (EventID.NEAR_MISS);
-				}
+				Vehicle v = col.gameObject.GetComponent<Vehicle>();
+				v.Explode();
 			}
 		}
 
+
+	}
+
+	void OnTriggerExit(Collider col)
+	{
+		if (col.gameObject.tag == "vehicle/nearMiss")
+		{
+			if (EventManager.OnGameEvent != null)
+			{
+				EventManager.OnGameEvent (EventID.NEAR_MISS);
+			}
+		}
 	}
 
 	void Update ()
@@ -71,17 +132,37 @@ public class PlayerModel : MonoBehaviour
 			fx_fire.transform.position = transform.position;
 		}
 
-		if(FlickInput.IS_HOLDING)
+		if (GameController.Instance.Player.FuryAchieved == false)
 		{
-			if(fx_thrust_one.isPlaying == false)
+			if (FlickInput.IS_HOLDING && !_vehicleHit)
 			{
-				fx_thrust_one.Play(); 
-				fx_thrust_two.Play(); 
+				ToggleFXFury(fx_thrust_regular, true);
+			} else
+			{
+
+				ToggleFXFury(fx_thrust_regular, false);
 			}
-		}else
+		}
+
+		// if (GameController.Instance.Player.FuryAchieved && GameController.Instance.Player.furyMeter.fill < .2f && !isPlaying)
+		// {
+		// 	fx_shield.transform.GetComponent<Animation>().Play();
+		// 	isPlaying = true;
+		// }
+
+	}
+
+	public void ToggleFXFury(ParticleSystem[] ps, bool b)
+	{
+		if (b)
 		{
-			fx_thrust_two.Stop();
-			fx_thrust_one.Stop(); 
+			ps[0].Play();
+			ps[1].Play();
+		}
+		else
+		{
+			ps[0].Stop();
+			ps[1].Stop();
 		}
 	}
 }

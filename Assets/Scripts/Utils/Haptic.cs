@@ -16,7 +16,7 @@ public class Haptic : MonoBehaviour {
 
 	public static bool ShowLog = false;
 
-	public static bool Enabled = true;
+	public static bool Enabled = false;
 
 	public static void Vibrate(HapticIntensity intensity)
 	{

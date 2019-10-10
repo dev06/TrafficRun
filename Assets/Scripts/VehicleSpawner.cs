@@ -8,6 +8,7 @@ public class VehicleSpawner : MonoBehaviour
 
 	private int _index;
 	private Section _parentSection;
+	private float _laneSpeed;
 
 	void Start ()
 	{
@@ -23,9 +24,9 @@ public class VehicleSpawner : MonoBehaviour
 
 	public void MoveNextVehicle ()
 	{
-		if (!vehicles[_index].isMoving)
+		if (vehicles[_index].CanPool)
 		{
-			vehicles[_index].Move ();
+			vehicles[_index].Move (_laneSpeed);
 		}
 		_index++;
 		if (_index > vehicles.Count - 1)
@@ -36,7 +37,8 @@ public class VehicleSpawner : MonoBehaviour
 
 	public void Activate()
 	{
-		InvokeRepeating ("MoveNextVehicle", Random.value, Random.Range (1f, 15f));
+		_laneSpeed = Random.Range(15f, 20f) * 2f;
+		InvokeRepeating ("MoveNextVehicle", Random.value, Random.Range (1f, 3f));
 	}
 
 	public void Deactivate()
