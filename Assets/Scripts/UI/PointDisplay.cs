@@ -46,11 +46,10 @@ public class PointDisplay : MonoBehaviour
 
 	void OnSectionTriggerHit ()
 	{
-		if(!GameController.Instance.Player.isAlive) return; 
+		if (!GameController.Instance.Player.isAlive) { return; }
 		if (!isNearMissText)
 		{
 			GameController.Score += 10;
-			Haptic.Vibrate (HapticIntensity.Light);
 			animations[index].Play ();
 			texts[index].text = "+1";
 			index++;
@@ -64,13 +63,23 @@ public class PointDisplay : MonoBehaviour
 
 	void OnGameEvent (EventID id)
 	{
-		if(!GameController.Instance.Player.isAlive) return; 
-		if (id == EventID.NEAR_MISS && isNearMissText)
+		if (!GameController.Instance.Player.isAlive) { return; }
+		texts[index].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Random.Range(-15f, 15f)));
+		if (id == EventID.NEAR_MISS && isNearMissText && !GameController.Instance.Player.FuryAchieved)
 		{
 			GameController.Score += 20;
 			Haptic.Vibrate (HapticIntensity.Light);
 			animations[index].Play ();
 			texts[index].text = "Near Miss!";
+			index++;
+			if (index > animations.Count - 1)
+			{
+				index = 0;
+			}
+		} else if (id == EventID.FURY_VEHICLE_HIT && isNearMissText)
+		{
+			animations[index].Play ();
+			texts[index].text = "Hit!";
 			index++;
 			if (index > animations.Count - 1)
 			{

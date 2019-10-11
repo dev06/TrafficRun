@@ -17,10 +17,12 @@ public enum TrafficIntensity
 	MEDIUM,
 	HEAVY,
 }
+
 public class Section : MonoBehaviour
 {
 	public SectionType type;
 	public TrafficIntensity trafficIntensity;
+	public LevelType levelType;
 	public bool exclude;
 	public Transform propSets;
 
@@ -30,13 +32,14 @@ public class Section : MonoBehaviour
 	private Vector3 _targetPosition;
 	public Transform _endConnector;
 	private Component[] _vehicleSpawners;
+	private SectionPickup _pickups;
 	public void Init ()
 	{
 		_sectionController = SectionController.Instance;
 		_activate = true;
 		_targetPosition = Vector3.zero;
 		_endConnector = transform.GetChild(0).GetChild(0).transform;
-
+		_pickups = GetComponent<SectionPickup>();
 		_vehicleSpawners = GetComponentsInChildren<VehicleSpawner>();
 	}
 
@@ -67,12 +70,22 @@ public class Section : MonoBehaviour
 		transform.SetParent (_sectionController.transform);
 		if (propSets != null)
 		{
+			for (int i = 0; i < propSets.childCount; i++)
+			{
+				propSets.transform.GetChild(i).gameObject.SetActive(false);
+			}
+
 			propSets.transform.GetChild(Random.Range(0, propSets.childCount)).gameObject.SetActive(true);
 		}
 		_activate = true;
 		foreach (VehicleSpawner v in _vehicleSpawners)
 		{
 			v.Activate();
+		}
+
+		if (_pickups != null)
+		{
+			_pickups.Activate();
 		}
 	}
 
@@ -104,6 +117,7 @@ public class Section : MonoBehaviour
 	public void Deactivate()
 	{
 		Hide();
+
 		_activate = false;
 	}
 
@@ -114,6 +128,11 @@ public class Section : MonoBehaviour
 		foreach (VehicleSpawner v in _vehicleSpawners)
 		{
 			v.Deactivate();
+		}
+
+		if (_pickups != null)
+		{
+			_pickups.Deactivate();
 		}
 	}
 

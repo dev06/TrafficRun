@@ -12,6 +12,9 @@ public enum EventID
 	FURY_START,
 	FURY_END,
 	PROTECTION_END,
+	FURY_VEHICLE_HIT,
+	COIN_PICKUP,
+	RESTART,
 }
 public class EventManager : MonoBehaviour
 {

@@ -8,9 +8,11 @@ public class SectionController : MonoBehaviour
 
 	public float velocity = 30;
 	public List<Section> sections = new List<Section> ();
-	public Reserved reserved;
 
-	private int remaining = 4;
+	public Reserved beachReserved, townReserved;
+	private Reserved reserved;
+
+	private int remaining;
 
 	void Awake ()
 	{
@@ -38,6 +40,31 @@ public class SectionController : MonoBehaviour
 		}
 	}
 
+	void OnEnable ()
+	{
+
+		EventManager.OnGameEvent += OnGameEvent;
+	}
+
+	void OnDisable ()
+	{
+
+		EventManager.OnGameEvent -= OnGameEvent;
+	}
+
+	void OnGameEvent(EventID id)
+	{
+		switch (id)
+		{
+			case EventID.RESTART:
+			{
+				velocity = 0;
+				GenerateInitialRoad();
+				break;
+			}
+		}
+	}
+
 	void Start ()
 	{
 		GenerateInitialRoad ();
@@ -45,14 +72,19 @@ public class SectionController : MonoBehaviour
 
 	public void GenerateInitialRoad ()
 	{
+		reserved = getReservedByLevel();
+
 		do
 		{
 			Section s = transform.GetChild (0).GetComponent<Section> ();
-			s.transform.SetParent (reserved.transform);
+			s.transform.SetParent (s.levelType == LevelType.TOWN ? townReserved.transform : beachReserved.transform);
 			s.Deactivate ();
 		} while (transform.childCount > 0);
 
-		for (int i = 0; i < 7; i++)
+		int _zone = LevelController.Instance.Zone;
+		remaining = _zone == 4 ? 5 : 30;
+
+		for (int i = 0; i < 8; i++)
 		{
 			Section _sectionToAdd = null;
 			if (i == 0)
@@ -62,6 +94,11 @@ public class SectionController : MonoBehaviour
 				_sectionToAdd.transform.position = Vector3.zero;
 				_sectionToAdd.transform.SetParent (transform);
 				_sectionToAdd.Activate ();
+
+				if (_sectionToAdd.transform.GetComponent<SectionPickup>() != null)
+				{
+					_sectionToAdd.transform.GetComponent<SectionPickup>().Deactivate();
+				}
 				continue;
 			}
 
@@ -72,10 +109,17 @@ public class SectionController : MonoBehaviour
 			}
 			else
 			{
-				_sectionToAdd = reserved.GetSectionInReservedByType (getLane (), getTrafficIntensity ());
+				SectionType _type = _zone == 4 ? SectionType.NO_LANE : SectionType.STARTER;
+				TrafficIntensity _traffic = _zone == 4 ? TrafficIntensity.NONE : TrafficIntensity.LIGHT;
+				_sectionToAdd = reserved.GetSectionInReservedByType (_type, _traffic);
 			}
+
 			_sectionToAdd.Init ();
 			_sectionToAdd.Connect (_last);
+			if (_sectionToAdd.transform.GetComponent<SectionPickup>() != null)
+			{
+				_sectionToAdd.transform.GetComponent<SectionPickup>().Activate();
+			}
 		}
 	}
 
@@ -97,7 +141,7 @@ public class SectionController : MonoBehaviour
 			}
 			else
 			{
-				_reserved = reserved.GetSectionInReservedByType (getLane (), getTrafficIntensity ()); //gets random section from reserved list
+				_reserved = reserved.GetSectionInReservedByType (getLane(), getTrafficIntensity ()); //gets random section from reserved list
 			}
 		}
 		if (remaining >= 0)
@@ -109,7 +153,7 @@ public class SectionController : MonoBehaviour
 				remaining--;
 			}
 		}
-		_deactiveSection.transform.SetParent (reserved.transform);
+		_deactiveSection.transform.SetParent (_deactiveSection.levelType == LevelType.TOWN ? townReserved.transform : beachReserved.transform);
 	}
 
 	public float Velocity
@@ -124,9 +168,9 @@ public class SectionController : MonoBehaviour
 		switch (_zone)
 		{
 			case 4:
-				{
-					return SectionType.NO_LANE;
-				}
+			{
+				return SectionType.NO_LANE;
+			}
 		}
 
 		return SectionType.LANE;
@@ -135,24 +179,35 @@ public class SectionController : MonoBehaviour
 	private TrafficIntensity getTrafficIntensity ()
 	{
 		int _zone = LevelController.Instance.Zone;
+		int _level = LevelController.Instance.Level;
+		if (_level < 5 && _zone != 4)
+		{
+			return TrafficIntensity.LIGHT;
+		}
+
 		switch (_zone)
 		{
 			case 1:
-				{
-					return TrafficIntensity.LIGHT;
-				}
+			{
+				return TrafficIntensity.LIGHT;
+			}
 			case 2:
-				{
-					float _p = Random.value;
-					return _p < .5f ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT;
-				}
+			{
+				float _p = Random.value;
+				return _p < .5f ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT;
+			}
 
 			case 3:
-				{
-					float _p = Random.value;
-					return _p < .5f ? TrafficIntensity.HEAVY : ((Random.value < .5f) ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT);
-				}
+			{
+				float _p = Random.value;
+				return _p < .5f ? TrafficIntensity.HEAVY : ((Random.value < .5f) ? TrafficIntensity.MEDIUM : TrafficIntensity.LIGHT);
+			}
 		}
 		return TrafficIntensity.NONE;
+	}
+
+	private Reserved getReservedByLevel()
+	{
+		return LevelController.Instance.levelType == LevelType.BEACH ? beachReserved : townReserved;
 	}
 }

@@ -2,14 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum LevelType
+{
+	NONE,
+	BEACH,
+	TOWN,
+}
 public class LevelController : MonoBehaviour
 {
 
 	public static LevelController Instance;
 
-	public int Level = 1;
-	public int Zone = 1;
+	public LevelType staringLevelType = LevelType.BEACH;
+	public int startingLevel = 1;
+	public int startingZone = 1;
 
+	[HideInInspector]
+	public int Level = 1;
+	[HideInInspector]
+	public int Zone = 1;
+	[HideInInspector]
+	public LevelType levelType = LevelType.BEACH;
+	private int levelIndex = 1;
 
 	public LevelDisplay levelDisplay;
 	public CompletePage completePage;
@@ -35,14 +49,19 @@ public class LevelController : MonoBehaviour
 
 	public void Load()
 	{
-		Level = PlayerPrefs.HasKey("LEVEL") ? PlayerPrefs.GetInt("LEVEL") : 1;
-		Zone = PlayerPrefs.HasKey("ZONE") ? PlayerPrefs.GetInt("ZONE") : 1;
+		levelIndex = PlayerPrefs.HasKey("LEVEL_INDEX") ? PlayerPrefs.GetInt("LEVEL_INDEX") : (int)staringLevelType;
+		levelType = (LevelType)levelIndex;
+		Level = PlayerPrefs.HasKey("LEVEL") ? PlayerPrefs.GetInt("LEVEL") : startingLevel;
+		Zone = PlayerPrefs.HasKey("ZONE") ? PlayerPrefs.GetInt("ZONE") : startingZone;
+	}
+
+	public void Save()
+	{
+
 	}
 
 	void Start()
 	{
-
-
 		levelDisplay.UpdateData(Level, Zone);
 	}
 
@@ -70,12 +89,21 @@ public class LevelController : MonoBehaviour
 		{
 			Zone = 1;
 			Level++;
+			levelIndex++;
+			if (levelIndex > 2)
+			{
+				levelIndex = 1;
+			}
+
 		} else
 		{
 			Zone++;
 		}
 		PlayerPrefs.SetInt("LEVEL", Level);
 		PlayerPrefs.SetInt("ZONE", Zone);
+		PlayerPrefs.SetInt("LEVEL_INDEX", levelIndex);
+
+
 	}
 
 }

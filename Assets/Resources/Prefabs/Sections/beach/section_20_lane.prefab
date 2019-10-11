@@ -473,8 +473,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   trafficIntensity: 3
-  length: 120
+  levelType: 1
   exclude: 0
+  propSets: {fileID: 0}
   _endConnector: {fileID: 0}
 --- !u!1 &578637059662408397
 GameObject:

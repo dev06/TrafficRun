@@ -14,16 +14,23 @@ public class PlayerMovement : MonoBehaviour
     public ProgressMeter furyMeter;
 
     private SectionController _sectionController;
-    private bool _flicked, _furyAchieved, _inProtection;
+    private bool _flicked, _furyAchieved, _inProtection, _isFinished;
     private float _flickTimer;
     private int _flickCount;
+    private int _zone;
 
     private float _fury;
-    private float _furyDepletionRate;
+
+    private Vector3 _defaultPos;
+    private Quaternion _defaultRot;
     void Start ()
     {
         FuryAchieved = false;
         _sectionController = SectionController.Instance;
+        _zone = LevelController.Instance.Zone;
+        maxVelocity = _zone == 4 ? 175f : 100f;
+        _defaultPos = transform.position;
+        _defaultRot = transform.rotation;
     }
 
     void OnEnable ()
@@ -51,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDown ()
     {
+        if (_isFinished) { return; }
         if (GameController.Instance.state != State.Game)
         {
             GameController.Instance.SetState(State.Game);
@@ -68,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         //StartCoroutine("IBrake");
         if (!_furyAchieved)
         {
-            Fury += .08f;
+            Fury += .1f;
         }
     }
 
@@ -78,9 +86,9 @@ public class PlayerMovement : MonoBehaviour
         {
             case EventID.FINISH:
             {
+                _isFinished = true;
                 CameraController.Instance.Detach ();
                 _sectionController.Velocity = 0;
-
                 UIController.Instance.ShowPage (PageType.Complete);
                 StartCoroutine ("ITranslate");
                 break;
@@ -105,15 +113,34 @@ public class PlayerMovement : MonoBehaviour
             {
                 break;
             }
+
+            case EventID.RESTART:
+            {
+                StopCoroutine("ITranslate");
+                isAlive = true;
+                fx_explosion.Stop();
+                transform.position = _defaultPos;
+                transform.rotation = _defaultRot;
+                _furyAchieved = false;
+                _inProtection = false;
+                _isFinished = false;
+                Fury = 0;
+                break;
+            }
         }
     }
 
     IEnumerator IRestart ()
     {
         yield return new WaitForSecondsRealtime (4f);
-        UnityEngine.SceneManagement.SceneManager.LoadScene (0);
-
+        // UnityEngine.SceneManagement.SceneManager.LoadScene (0);
+        GameController.Instance.Restart();
+        // if (EventManager.OnGameEvent != null)
+        // {
+        //     EventManager.OnGameEvent(EventID.RESTART);
+        // }
     }
+
 
     IEnumerator ITranslate ()
     {
@@ -128,9 +155,6 @@ public class PlayerMovement : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
-
-        // UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-
     }
 
     void Update ()
@@ -147,25 +171,31 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        float _mult = .15f;
+        float _mult = .1f;
         Fury -= Time.deltaTime * _mult;
 
 
         if (!_furyAchieved)
         {
-            if (FlickInput.IS_HOLDING)
+            if (!_isFinished)
             {
-                _sectionController.Velocity += Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
-            }
-            else
-            {
-                _sectionController.Velocity -= Time.deltaTime * (frictionBrake);
+                if (FlickInput.IS_HOLDING)
+                {
+                    _sectionController.Velocity += Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
+                }
+                else
+                {
+                    _sectionController.Velocity -= Time.deltaTime * (frictionBrake);
+                }
             }
             _sectionController.Velocity = Mathf.Clamp (_sectionController.velocity, 0f, maxVelocity);
         } else
         {
-            _sectionController.Velocity += Time.deltaTime *  onHoldBrakePower;
-            _sectionController.Velocity = Mathf.Clamp (_sectionController.velocity, 0f, maxVelocity * 1.5f);
+            if (!_isFinished)
+            {
+                _sectionController.Velocity += Time.deltaTime *  onHoldBrakePower;
+                _sectionController.Velocity = Mathf.Clamp (_sectionController.velocity, 0f, maxVelocity * 1.5f);
+            }
         }
 
 
@@ -241,4 +271,6 @@ public class PlayerMovement : MonoBehaviour
         get {return _furyAchieved; }
         set {_furyAchieved = value; }
     }
+
+
 }

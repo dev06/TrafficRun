@@ -9,11 +9,13 @@ public class CameraController : MonoBehaviour
 	private bool _isDetached;
 	private Vector3 _defaultPosition, _target;
 
+
 	public float backForce;
 	public float backSmoothTime = 5f;
 	public float zeroSmoothTime = 2f;
 	public float shakeIntensity = 4f;
 
+	public Light directionalLight;
 	public PostProcessingProfile activeProfile;
 	public PostProcessingProfile inactiveProfile;
 
@@ -70,12 +72,14 @@ public class CameraController : MonoBehaviour
 			case EventID.FURY_START:
 			{
 				setBloom(activeProfile);
+				directionalLight.intensity = 1.1f;
 				break;
 			}
 
 			case EventID.FURY_END:
 			{
 				setBloom(inactiveProfile);
+				directionalLight.intensity = 1f;
 				break;
 			}
 		}

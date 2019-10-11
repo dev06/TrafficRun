@@ -21,7 +21,7 @@ public class Vehicle : MonoBehaviour
 	public ParticleSystem fx_fire;
 	public bool isMoving;
 	private VTransform _vtransform;
-	private float speed;
+	private float speed, _targetSpeed;
 	private Rigidbody _rigidbody;
 	private bool _exploded;
 	private bool _canPool;
@@ -35,16 +35,27 @@ public class Vehicle : MonoBehaviour
 		{
 			return;
 		}
+		if (Mathf.Abs(_targetSpeed - speed) > .05f)
+		{
+			speed = Mathf.Lerp(speed, _targetSpeed, Time.deltaTime * 2f);
+		}
 		transform.Translate (-transform.forward * Time.deltaTime * speed, Space.World);
+	}
+
+	private void setTransform(Vector3 _localPosition, Quaternion _localRotation)
+	{
+		_vtransform.position = _localPosition;
+		_vtransform.rotation = _localRotation;
 	}
 
 	public void Move (float _speed)
 	{
-		speed = _speed;
+		_targetSpeed = _speed;
+		speed = 50;
 		transform.gameObject.SetActive (true);
 		isMoving = true;
-		_vtransform.position = transform.localPosition;
-		_vtransform.rotation = transform.localRotation;
+		// _vtransform.position = transform.localPosition;
+		// _vtransform.rotation = transform.localRotation;
 		_canPool = false;
 		fx_fire.Stop();
 	}

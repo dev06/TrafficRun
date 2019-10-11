@@ -14,6 +14,7 @@ public enum ButtonID
 	B_None,
 	B_Vibration,
 	B_Continue,
+	B_Play,
 }
 
 public class ButtonEventHandler : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler

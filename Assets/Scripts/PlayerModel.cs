@@ -11,7 +11,8 @@ public class PlayerModel : MonoBehaviour
 	private Collider _collider;
 	private Rigidbody _rigidbody;
 	private bool _vehicleHit;
-
+	private Vector3 _defaultPos;
+	private Quaternion _defaultRot;
 
 	void OnEnable ()
 	{
@@ -30,6 +31,9 @@ public class PlayerModel : MonoBehaviour
 		_rigidbody = GetComponent<Rigidbody> ();
 		_collider = GetComponent<Collider> ();
 		_mesh = GetComponent<MeshRenderer> ();
+
+		_defaultRot = transform.rotation;
+		_defaultPos = transform.position;
 	}
 
 	void OnGameEvent(EventID id)
@@ -62,9 +66,20 @@ public class PlayerModel : MonoBehaviour
 				break;
 			}
 
+			case EventID.RESTART:
+			{
+				_vehicleHit = false;
+				fx_fire.transform.gameObject.SetActive(false);
+				_rigidbody.isKinematic = true;
+				_rigidbody.velocity = Vector3.zero;
+				transform.position = _defaultPos;
+				transform.rotation = _defaultRot;
+				break;
+			}
+
 		}
 	}
-	bool isPlaying;
+
 	void OnTriggerEnter (Collider col)
 	{
 		if (col.gameObject.tag == "section/point_trigger")
@@ -83,9 +98,19 @@ public class PlayerModel : MonoBehaviour
 			}
 		}
 
-		if (!GameController.Instance.Player.EnableProtection)
+		if (col.gameObject.tag == "objects/coin")
 		{
-			isPlaying = false;
+			if (EventManager.OnGameEvent != null)
+			{
+				EventManager.OnGameEvent(EventID.COIN_PICKUP);
+			}
+			Haptic.Vibrate(HapticIntensity.Light);
+			col.gameObject.GetComponent<Coin>().Pickup();
+			GameController.Instance.GoldCollected++;
+		}
+
+		if (!GameController.Instance.Player.EnableProtection && !_vehicleHit)
+		{
 			if (col.gameObject.tag == "section/vehicle")
 			{
 				if (_mesh.enabled && GameController.Instance.debug == false)
@@ -94,7 +119,9 @@ public class PlayerModel : MonoBehaviour
 					{
 						EventManager.OnGameEvent (EventID.VEHICLE_HIT);
 					}
+					Haptic.Instance.VibrateTwice(.1f, HapticIntensity.Medium);
 					_vehicleHit = true;
+					fx_fire.transform.gameObject.SetActive(true);
 					fx_fire.Play ();
 					_rigidbody.isKinematic = false;
 					_rigidbody.AddForce (Vector3.up * 500f, ForceMode.Force);
@@ -108,6 +135,11 @@ public class PlayerModel : MonoBehaviour
 			{
 				Vehicle v = col.gameObject.GetComponent<Vehicle>();
 				v.Explode();
+				Haptic.Vibrate(HapticIntensity.Medium);
+				if (EventManager.OnGameEvent != null)
+				{
+					EventManager.OnGameEvent (EventID.FURY_VEHICLE_HIT);
+				}
 			}
 		}
 
@@ -143,13 +175,6 @@ public class PlayerModel : MonoBehaviour
 				ToggleFXFury(fx_thrust_regular, false);
 			}
 		}
-
-		// if (GameController.Instance.Player.FuryAchieved && GameController.Instance.Player.furyMeter.fill < .2f && !isPlaying)
-		// {
-		// 	fx_shield.transform.GetComponent<Animation>().Play();
-		// 	isPlaying = true;
-		// }
-
 	}
 
 	public void ToggleFXFury(ParticleSystem[] ps, bool b)

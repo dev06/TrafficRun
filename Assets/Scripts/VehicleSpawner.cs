@@ -9,9 +9,11 @@ public class VehicleSpawner : MonoBehaviour
 	private int _index;
 	private Section _parentSection;
 	private float _laneSpeed;
+	private bool _hasInit;
 
-	void Start ()
+	private void Init()
 	{
+		if (_hasInit) { return; }
 		for (int i = 0; i < transform.childCount; i++)
 		{
 			Vehicle v = transform.GetChild (i).GetComponent<Vehicle> ();
@@ -20,6 +22,12 @@ public class VehicleSpawner : MonoBehaviour
 		}
 
 		_parentSection = GetComponentInParent<Section>();
+		_hasInit =  true;
+	}
+
+	void Start ()
+	{
+
 	}
 
 	public void MoveNextVehicle ()
@@ -37,8 +45,22 @@ public class VehicleSpawner : MonoBehaviour
 
 	public void Activate()
 	{
-		_laneSpeed = Random.Range(15f, 20f) * 2f;
-		InvokeRepeating ("MoveNextVehicle", Random.value, Random.Range (1f, 3f));
+		Init();
+		_laneSpeed = (Random.Range(10f, 15f) * .015f * LevelController.Instance.Level) + 12f;
+		_laneSpeed = Mathf.Clamp(_laneSpeed, 12f, 30f);
+		positionVehicles();
+		InvokeRepeating ("MoveNextVehicle", Random.value, Random.Range (.5f, 1f));
+	}
+
+	private void positionVehicles()
+	{
+		float v = Random.Range(35f, 70f);
+		for (int i = 0; i < vehicles.Count; i++)
+		{
+			Vector3 _position = new Vector3(0f, 0f, -(i + 1) * v);
+			vehicles[i].transform.localPosition = _position;
+			vehicles[i].Move(_laneSpeed);
+		}
 	}
 
 	public void Deactivate()

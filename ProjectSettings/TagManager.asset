@@ -12,6 +12,7 @@ TagManager:
   - section/finish
   - section/endconnector
   - vehicle/nearMiss
+  - objects/coin
   layers:
   - Default
   - TransparentFX
