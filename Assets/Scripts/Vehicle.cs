@@ -25,9 +25,11 @@ public class Vehicle : MonoBehaviour
 	private Rigidbody _rigidbody;
 	private bool _exploded;
 	private bool _canPool;
+	private Collider _collider;
 	public void Init ()
 	{
 		_canPool = true;
+		_collider = GetComponent<Collider>();
 	}
 	void Update ()
 	{
@@ -58,6 +60,7 @@ public class Vehicle : MonoBehaviour
 		// _vtransform.rotation = transform.localRotation;
 		_canPool = false;
 		fx_fire.Stop();
+		_collider.isTrigger = true;
 	}
 
 	public void Deactivate ()
@@ -70,18 +73,22 @@ public class Vehicle : MonoBehaviour
 		_canPool = true;
 	}
 
-	public void Explode()
+	public void Explode(float upwardForce, float forwardForce)
 	{
 		if (_exploded) { return; }
 		_exploded = true;
 		isMoving = false;
+		if (GameController.Instance.Player.FuryAchieved == false)
+		{
+			_collider.isTrigger = false;
+		}
 		if (_rigidbody == null)
 		{
 			_rigidbody = GetComponent<Rigidbody>();
 		}
 		fx_fire.Play();
 		_rigidbody.isKinematic = false;
-		_rigidbody.AddForce (Vector3.up * 500f + (Vector3.forward * 3000f), ForceMode.Force);
+		_rigidbody.AddForce (Vector3.up * upwardForce + (Vector3.forward * forwardForce), ForceMode.Force);
 		_rigidbody.AddTorque (new Vector3 (Random.value, Random.value, Random.value) * 2000f);
 		StartCoroutine("IReadyToDeactive");
 	}

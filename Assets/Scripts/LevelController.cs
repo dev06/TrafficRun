@@ -23,6 +23,11 @@ public class LevelController : MonoBehaviour
 	public int Zone = 1;
 	[HideInInspector]
 	public LevelType levelType = LevelType.BEACH;
+
+	[HideInInspector]
+	public int Progress;
+	[HideInInspector]
+	public int TotalSections;
 	private int levelIndex = 1;
 
 	public LevelDisplay levelDisplay;
@@ -53,6 +58,7 @@ public class LevelController : MonoBehaviour
 		levelType = (LevelType)levelIndex;
 		Level = PlayerPrefs.HasKey("LEVEL") ? PlayerPrefs.GetInt("LEVEL") : startingLevel;
 		Zone = PlayerPrefs.HasKey("ZONE") ? PlayerPrefs.GetInt("ZONE") : startingZone;
+		Progress = 0;
 	}
 
 	public void Save()
@@ -80,11 +86,13 @@ public class LevelController : MonoBehaviour
 			PlayerPrefs.SetInt("ZONE", Zone);
 			levelDisplay.UpdateData(Level, Zone);
 		}
+
+		levelDisplay.ZoneProgress = RatioProgress;
 	}
 
 	void OnComplete(string _id, int level, int zone)
 	{
-		completePage.UpdateData(GameController.Score, Zone == 4 ? 1 : 0);
+		completePage.UpdateData(GameController.Score, GameController.Instance.Best, Zone == 4 ? 1 : 0);
 		if (Zone == 4)
 		{
 			Zone = 1;
@@ -102,8 +110,13 @@ public class LevelController : MonoBehaviour
 		PlayerPrefs.SetInt("LEVEL", Level);
 		PlayerPrefs.SetInt("ZONE", Zone);
 		PlayerPrefs.SetInt("LEVEL_INDEX", levelIndex);
-
-
 	}
 
+	public float RatioProgress
+	{
+		get
+		{
+			return (float)Progress / (float)TotalSections;
+		}
+	}
 }

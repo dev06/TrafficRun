@@ -8,7 +8,9 @@ public class PlayerMovement : MonoBehaviour
     public float onHoldBrakePower = 800;
     public float frictionBrake = 100;
     public ParticleSystem fx_explosion;
+    public Trail fx_trail;
     public bool isAlive = true;
+    public Section currentSection;
 
     [Header("Fields")]
     public ProgressMeter furyMeter;
@@ -35,34 +37,38 @@ public class PlayerMovement : MonoBehaviour
 
     void OnEnable ()
     {
-        FlickInput.OnFlick += OnFlick;
         FlickInput.OnDown += OnDown;
         EventManager.OnSectionTriggerHit += OnSectionTriggerHit;
         EventManager.OnGameEvent += OnGameEvent;
+        FlickInput.OnUp += OnUp;
     }
 
     void OnDisable ()
     {
-        FlickInput.OnFlick -= OnFlick;
+
         FlickInput.OnDown -= OnDown;
         EventManager.OnSectionTriggerHit -= OnSectionTriggerHit;
         EventManager.OnGameEvent -= OnGameEvent;
+        FlickInput.OnUp -= OnUp;
     }
 
-    void OnFlick ()
+    void OnUp()
     {
-        _sectionController.Velocity += maxVelocity;
-        _flicked = true;
-        _flickCount++;
+        if (_sectionController.Velocity >= maxVelocity && !FuryAchieved)
+        {
+            AudioController.Instance.Play(SFX.CAR_BRAKE);
+            fx_trail.Activate(transform.GetChild(0).transform.position);
+
+        }
     }
 
     void OnDown ()
     {
         if (_isFinished) { return; }
-        if (GameController.Instance.state != State.Game)
-        {
-            GameController.Instance.SetState(State.Game);
-        }
+        // if (GameController.Instance.state != State.Game)
+        // {
+        //     GameController.Instance.SetState(State.Game);
+        // }
 
         if (!FuryAchieved)
         {
@@ -74,10 +80,6 @@ public class PlayerMovement : MonoBehaviour
     {
         //StopCoroutine("IBrake");
         //StartCoroutine("IBrake");
-        if (!_furyAchieved)
-        {
-            Fury += .1f;
-        }
     }
 
     void OnGameEvent (EventID id)
@@ -89,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
                 _isFinished = true;
                 CameraController.Instance.Detach ();
                 _sectionController.Velocity = 0;
+                GameController.Instance.CalculateScore();
                 UIController.Instance.ShowPage (PageType.Complete);
                 StartCoroutine ("ITranslate");
                 break;
@@ -105,12 +108,14 @@ public class PlayerMovement : MonoBehaviour
 
             case EventID.FURY_START:
             {
-                CameraController.Instance.SetPosition(-Vector3.forward);
+                CameraController.Instance.SetPosition(-Vector3.forward * 3f);
+                Haptic.VibrateHandheld();
                 break;
             }
 
             case EventID.FURY_END:
             {
+                CameraController.Instance.SetPosition(Vector3.forward * 3f);
                 break;
             }
 
@@ -134,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime (4f);
         // UnityEngine.SceneManagement.SceneManager.LoadScene (0);
-        GameController.Instance.Restart();
+        GameController.Instance.Restart(true);
         // if (EventManager.OnGameEvent != null)
         // {
         //     EventManager.OnGameEvent(EventID.RESTART);
@@ -159,21 +164,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update ()
     {
-        if (!isAlive) { return; }
-        if (_flicked)
+        if (!isAlive || GameController.Instance.state != State.Game) { return; }
+
+        if (fx_trail.CanSetParent && _sectionController.Velocity > 0)
         {
-            _flickTimer += Time.deltaTime;
-            if (_flickTimer > 2f)
-            {
-                _flickTimer = 0;
-                _flicked = false;
-                _flickCount = 0;
-            }
+            fx_trail.transform.SetParent(currentSection.transform);
         }
-
-        float _mult = .1f;
-        Fury -= Time.deltaTime * _mult;
-
 
         if (!_furyAchieved)
         {
@@ -182,6 +178,7 @@ public class PlayerMovement : MonoBehaviour
                 if (FlickInput.IS_HOLDING)
                 {
                     _sectionController.Velocity += Time.deltaTime * (FlickInput.IS_HOLDING ? onHoldBrakePower : frictionBrake);
+                    Fury += Time.deltaTime * .2f;
                 }
                 else
                 {
@@ -198,7 +195,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-
+        float _mult = .1f;
+        Fury -= Time.deltaTime * _mult;
 
         if (Input.GetKeyDown(KeyCode.F))
         {

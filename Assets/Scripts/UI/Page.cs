@@ -15,6 +15,8 @@ public enum PageType
 public class Page : MonoBehaviour
 {
 	private  CanvasGroup _cg;
+
+	protected Animation _animation;
 	public PageType type;
 	public bool showInEdit;
 
@@ -32,5 +34,15 @@ public class Page : MonoBehaviour
 
 		_cg.alpha = _b ? 1f : 0f;
 		_cg.blocksRaycasts = _b;
+
+		if (_animation == null)
+		{
+			_animation = GetComponent<Animation>();
+		}
+		if (_animation == null)
+		{
+			return;
+		}
+		_animation.Play();
 	}
 }

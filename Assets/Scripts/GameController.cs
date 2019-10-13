@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
 
 	public static GameController Instance;
 	public static int Score;
+	public int Best;
 
 	public int Gold;
 	public int GoldCollected;
@@ -24,6 +25,8 @@ public class GameController : MonoBehaviour
 
 	public LevelController levelController;
 	public PlayerMovement player;
+
+	public bool hasDoneVehicleAnim;
 	void Awake ()
 	{
 		if (Instance == null)
@@ -70,13 +73,20 @@ public class GameController : MonoBehaviour
 
 	public void Load ()
 	{
+		hasDoneVehicleAnim = false;
 		levelController.Load ();
 		Gold = PlayerPrefs.HasKey("GOLD") ? PlayerPrefs.GetInt("GOLD") : 0;
+		Best = PlayerPrefs.HasKey("BEST") ? PlayerPrefs.GetInt("BEST") : 0;
 		GoldCollected = 0;
 	}
 
-	public void Restart()
+	public void Restart(bool _wasDead = false)
 	{
+		CalculateScore();
+		if (_wasDead)
+		{
+			Score = 0;
+		}
 		Gold += GoldCollected;
 		PlayerPrefs.SetInt("GOLD", Gold);
 		levelController.Save();
@@ -97,6 +107,16 @@ public class GameController : MonoBehaviour
 	void Start ()
 	{
 		SetState (State.Menu);
+	}
+
+	public void CalculateScore()
+	{
+		if (Score > Best)
+		{
+			Best = Score;
+		}
+
+		PlayerPrefs.SetInt("BEST", Best);
 	}
 
 	public void SetState (State s)

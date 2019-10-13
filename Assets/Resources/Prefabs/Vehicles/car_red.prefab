@@ -9560,7 +9560,7 @@ GameObject:
   - component: {fileID: 3367608987041598612}
   m_Layer: 0
   m_Name: near_miss (1)
-  m_TagString: vehicle/nearMiss
+  m_TagString: vehicle/nearMiss_f
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

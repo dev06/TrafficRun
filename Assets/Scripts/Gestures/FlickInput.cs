@@ -7,6 +7,7 @@ public class FlickInput : MonoBehaviour
     public delegate void GameInput ();
     public static event GameInput OnFlick;
     public static event GameInput OnDown;
+    public static event GameInput OnUp;
 
     public static bool IS_HOLDING;
 
@@ -66,6 +67,11 @@ public class FlickInput : MonoBehaviour
             _pointerUp = Camera.main.ScreenToViewportPoint (Input.mousePosition);
             IS_HOLDING = false;
             _holdTimer = 0f;
+
+            if (OnUp != null)
+            {
+                OnUp();
+            }
         }
     }
 }

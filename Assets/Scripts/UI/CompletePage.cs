@@ -7,6 +7,8 @@ public class CompletePage : Page
 {
 	public Image[] titleImages;
 	public TextMeshProUGUI score;
+	public TextMeshProUGUI best;
+
 
 
 	void OnEnable()
@@ -42,9 +44,10 @@ public class CompletePage : Page
 		}
 	}
 
-	public void UpdateData(int score, int titleIndex)
+	public void UpdateData(int score, int best, int titleIndex)
 	{
 		this.score.text = score.ToString();
+		this.best.text = "Best: " + best.ToString();
 		titleImages[titleIndex].enabled = true;
 	}
 }

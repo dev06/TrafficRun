@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerModel : MonoBehaviour
 {
+	public int targetZValue = 78;
 	public GameObject fx_shield;
 	public ParticleSystem fx_fire, fx_shield_wind, fx_shield_par;
 	public ParticleSystem[] fx_thrust_regular, fx_thrust_fury;
@@ -32,9 +33,11 @@ public class PlayerModel : MonoBehaviour
 		_collider = GetComponent<Collider> ();
 		_mesh = GetComponent<MeshRenderer> ();
 
+		transform.position = Vector3.zero;
 		_defaultRot = transform.rotation;
 		_defaultPos = transform.position;
 	}
+
 
 	void OnGameEvent(EventID id)
 	{
@@ -82,6 +85,12 @@ public class PlayerModel : MonoBehaviour
 
 	void OnTriggerEnter (Collider col)
 	{
+		if (col.gameObject.tag == "section/road_start")
+		{
+			LevelController.Instance.Progress++;
+			GameController.Instance.Player.currentSection = col.gameObject.transform.parent.parent.GetComponent<Section>();
+			//Debug.Log(GameController.Instance.Player.currentSection);
+		}
 		if (col.gameObject.tag == "section/point_trigger")
 		{
 			if (EventManager.OnSectionTriggerHit != null)
@@ -98,6 +107,11 @@ public class PlayerModel : MonoBehaviour
 			}
 		}
 
+		if (col.gameObject.tag == "vehicle/nearMiss_f")
+		{
+			AudioController.Instance.Play(SFX.CAR_HORN);
+		}
+
 		if (col.gameObject.tag == "objects/coin")
 		{
 			if (EventManager.OnGameEvent != null)
@@ -107,6 +121,7 @@ public class PlayerModel : MonoBehaviour
 			Haptic.Vibrate(HapticIntensity.Light);
 			col.gameObject.GetComponent<Coin>().Pickup();
 			GameController.Instance.GoldCollected++;
+			AudioController.Instance.Play(SFX.COIN_PICKUP);
 		}
 
 		if (!GameController.Instance.Player.EnableProtection && !_vehicleHit)
@@ -119,6 +134,7 @@ public class PlayerModel : MonoBehaviour
 					{
 						EventManager.OnGameEvent (EventID.VEHICLE_HIT);
 					}
+					AudioController.Instance.Play(SFX.CAR_CRASH);
 					Haptic.Instance.VibrateTwice(.1f, HapticIntensity.Medium);
 					_vehicleHit = true;
 					fx_fire.transform.gameObject.SetActive(true);
@@ -126,6 +142,9 @@ public class PlayerModel : MonoBehaviour
 					_rigidbody.isKinematic = false;
 					_rigidbody.AddForce (Vector3.up * 500f, ForceMode.Force);
 					_rigidbody.AddTorque (new Vector3 (Random.value, Random.value, Random.value) * 2000f);
+
+					Vehicle v = col.gameObject.GetComponent<Vehicle>();
+					v.Explode(500f, 500f);
 				}
 				//_mesh.enabled = _collider.enabled = false;
 			}
@@ -134,8 +153,9 @@ public class PlayerModel : MonoBehaviour
 			if (col.gameObject.tag == "section/vehicle")
 			{
 				Vehicle v = col.gameObject.GetComponent<Vehicle>();
-				v.Explode();
+				v.Explode(500f, 3000f);
 				Haptic.Vibrate(HapticIntensity.Medium);
+				AudioController.Instance.Play(SFX.CAR_CRASH_FURY);
 				if (EventManager.OnGameEvent != null)
 				{
 					EventManager.OnGameEvent (EventID.FURY_VEHICLE_HIT);
@@ -148,7 +168,7 @@ public class PlayerModel : MonoBehaviour
 
 	void OnTriggerExit(Collider col)
 	{
-		if (col.gameObject.tag == "vehicle/nearMiss")
+		if (col.gameObject.tag == "vehicle/nearMiss" || col.gameObject.tag == "vehicle/nearMiss_f")
 		{
 			if (EventManager.OnGameEvent != null)
 			{
@@ -175,6 +195,18 @@ public class PlayerModel : MonoBehaviour
 				ToggleFXFury(fx_thrust_regular, false);
 			}
 		}
+
+		if (!GameController.Instance.hasDoneVehicleAnim)
+		{
+			if (transform.position.z < targetZValue)
+			{
+				transform.Translate(Vector3.forward * 75f * Time.deltaTime, Space.World);
+			} else {
+				GameController.Instance.hasDoneVehicleAnim = true;
+			}
+		}
+
+		//	transform.position = Vector3.Lerp(transform.position, new Vector3(0f, 0f, targetZValue), Time.deltaTime * 10f);
 	}
 
 	public void ToggleFXFury(ParticleSystem[] ps, bool b)

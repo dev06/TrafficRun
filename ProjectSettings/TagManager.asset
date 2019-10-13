@@ -13,6 +13,7 @@ TagManager:
   - section/endconnector
   - vehicle/nearMiss
   - objects/coin
+  - vehicle/nearMiss_f
   layers:
   - Default
   - TransparentFX

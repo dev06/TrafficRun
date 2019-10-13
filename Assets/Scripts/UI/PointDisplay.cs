@@ -64,9 +64,9 @@ public class PointDisplay : MonoBehaviour
 	void OnGameEvent (EventID id)
 	{
 		if (!GameController.Instance.Player.isAlive) { return; }
-		texts[index].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Random.Range(-15f, 15f)));
 		if (id == EventID.NEAR_MISS && isNearMissText && !GameController.Instance.Player.FuryAchieved)
 		{
+			texts[index].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Random.Range(-15f, 15f)));
 			GameController.Score += 20;
 			Haptic.Vibrate (HapticIntensity.Light);
 			animations[index].Play ();
@@ -78,6 +78,7 @@ public class PointDisplay : MonoBehaviour
 			}
 		} else if (id == EventID.FURY_VEHICLE_HIT && isNearMissText)
 		{
+			texts[index].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Random.Range(-15f, 15f)));
 			animations[index].Play ();
 			texts[index].text = "Hit!";
 			index++;

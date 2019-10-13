@@ -19,6 +19,9 @@ public class MenuPage : Page
 
 	public TextMeshProUGUI goldText;
 	public Sprite[] vibrationSprites;
+	public Sprite[] audioSprites;
+
+	public Image audioImage;
 	public Image vibrationImage;
 	void Start()
 	{
@@ -33,6 +36,9 @@ public class MenuPage : Page
 			Toggle(true);
 			Haptic.Enabled = PlayerPrefs.HasKey("VIBRATION") ? bool.Parse(PlayerPrefs.GetString("VIBRATION")) : true;
 			vibrationImage.sprite = Haptic.Enabled ? vibrationSprites[0] : vibrationSprites[1];
+
+			AudioController.Enabled = PlayerPrefs.HasKey("AUDIO") ? bool.Parse(PlayerPrefs.GetString("AUDIO")) : true;
+			audioImage.sprite = AudioController.Enabled ? audioSprites[0] : audioSprites[1];
 		}
 	}
 
@@ -49,7 +55,14 @@ public class MenuPage : Page
 			PlayerPrefs.SetString("VIBRATION", Haptic.Enabled.ToString());
 		}
 
-		if (_event == ButtonEvent.BUTTON_DOWN && _id == ButtonID.B_Play)
+		if (_event == ButtonEvent.BUTTON_CLICK && _id == ButtonID.B_Audio)
+		{
+			AudioController.Enabled = !AudioController.Enabled;
+			audioImage.sprite = AudioController.Enabled ? audioSprites[0] : audioSprites[1];
+			PlayerPrefs.SetString("AUDIO", AudioController.Enabled.ToString());
+		}
+
+		if (_event == ButtonEvent.BUTTON_DOWN && _id == ButtonID.B_Play && GameController.Instance.hasDoneVehicleAnim)
 		{
 			if (GameController.Instance.state != State.Game)
 			{

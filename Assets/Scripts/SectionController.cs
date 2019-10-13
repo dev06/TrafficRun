@@ -82,9 +82,13 @@ public class SectionController : MonoBehaviour
 		} while (transform.childCount > 0);
 
 		int _zone = LevelController.Instance.Zone;
-		remaining = _zone == 4 ? 5 : 30;
+		int _startingNumOfSections = 8;
+		int _defaultNumOfSections = 30;
+		int _bonusNumOfSections = 5;
+		LevelController.Instance.TotalSections = _startingNumOfSections + _defaultNumOfSections;
+		remaining = _zone == 4 ? _bonusNumOfSections : _defaultNumOfSections;
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < _startingNumOfSections; i++)
 		{
 			Section _sectionToAdd = null;
 			if (i == 0)
@@ -99,6 +103,8 @@ public class SectionController : MonoBehaviour
 				{
 					_sectionToAdd.transform.GetComponent<SectionPickup>().Deactivate();
 				}
+
+				GameController.Instance.Player.currentSection = _sectionToAdd;
 				continue;
 			}
 
