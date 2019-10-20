@@ -7,6 +7,7 @@ public enum State
 	Menu,
 	Game,
 	GameOver,
+	Store,
 }
 public class GameController : MonoBehaviour
 {
@@ -41,10 +42,12 @@ public class GameController : MonoBehaviour
 	void OnEnable()
 	{
 		EventManager.OnGameEvent += OnGameEvent;
+		EventManager.OnStateChange += OnStateChange;
 	}
 	void OnDisable()
 	{
 		EventManager.OnGameEvent -= OnGameEvent;
+		EventManager.OnStateChange -= OnStateChange;
 	}
 
 	void OnGameEvent(EventID id)
@@ -55,6 +58,54 @@ public class GameController : MonoBehaviour
 			{
 				SetState(State.Menu);
 				Load();
+				break;
+			}
+
+			case EventID.VEHICLE_HIT:
+			{
+				var parameters = new Dictionary<string, object> ();
+				parameters["Level"] = LevelController.Instance.Level;
+				parameters["Zone"] =  LevelController.Instance.Zone;
+				parameters["Progress"] =  LevelController.Instance.RatioProgress.ToString("F2");
+				FacebookManager.Instance.EventSent ("Death", 1, parameters);
+				//Debug.Log("Death -> " + LevelController.Instance.Level + " " + LevelController.Instance.Zone + " " + LevelController.Instance.RatioProgress.ToString("F2"));
+				break;
+			}
+
+			case EventID.FINISH:
+			{
+				var parameters = new Dictionary<string, object> ();
+				parameters["Level"] = LevelController.Instance.Level;
+				parameters["Score"] = Score;
+				parameters["Best"] = Best;
+				//Debug.Log("Game Over -> " + Score + " " + Best);
+				FacebookManager.Instance.EventSent ("Game Finish", 1, parameters);
+				break;
+			}
+		}
+	}
+
+	void OnStateChange(State s)
+	{
+		switch (s)
+		{
+			case State.Game:
+			{
+				var parameters = new Dictionary<string, object> ();
+				parameters["Money"] = Gold;
+				parameters["Level"] = LevelController.Instance.Level;
+				parameters["Zone"] =  LevelController.Instance.Zone;
+				parameters["Vehicle"] = PurchaseableVehicle.active.ID;
+				FacebookManager.Instance.EventSent ("Game Start", 1, parameters);
+				//Debug.Log("Game Start -> " + LevelController.Instance.Level + " " + PurchaseableVehicle.active.ID);
+
+
+				break;
+			}
+
+			case State.GameOver:
+			{
+
 				break;
 			}
 		}
@@ -117,6 +168,12 @@ public class GameController : MonoBehaviour
 		}
 
 		PlayerPrefs.SetInt("BEST", Best);
+	}
+
+	public void ModifyCoins(int v)
+	{
+		Gold += v;
+		PlayerPrefs.SetInt("GOLD", Gold);
 	}
 
 	public void SetState (State s)

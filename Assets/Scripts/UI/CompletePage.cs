@@ -34,13 +34,7 @@ public class CompletePage : Page
 	{
 		if (_event == ButtonEvent.BUTTON_CLICK && _id == ButtonID.B_Continue)
 		{
-			// if (EventManager.OnGameEvent != null)
-			// {
-			// 	EventManager.OnGameEvent(EventID.RESTART);
-			// }
-			//UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 			GameController.Instance.Restart();
-
 		}
 	}
 

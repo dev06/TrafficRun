@@ -6,6 +6,7 @@ public class PlayerModel : MonoBehaviour
 {
 	public int targetZValue = 78;
 	public GameObject fx_shield;
+	public Trail fx_trail;
 	public ParticleSystem fx_fire, fx_shield_wind, fx_shield_par;
 	public ParticleSystem[] fx_thrust_regular, fx_thrust_fury;
 	private MeshRenderer _mesh;
@@ -196,17 +197,30 @@ public class PlayerModel : MonoBehaviour
 			}
 		}
 
-		if (!GameController.Instance.hasDoneVehicleAnim)
-		{
-			if (transform.position.z < targetZValue)
-			{
-				transform.Translate(Vector3.forward * 75f * Time.deltaTime, Space.World);
-			} else {
-				GameController.Instance.hasDoneVehicleAnim = true;
-			}
-		}
+		// if (!GameController.Instance.hasDoneVehicleAnim)
+		// {
+		// 	GameController.Instance.hasDoneVehicleAnim = true;
+		// }
 
 		//	transform.position = Vector3.Lerp(transform.position, new Vector3(0f, 0f, targetZValue), Time.deltaTime * 10f);
+	}
+
+	public void TranslateVehicle()
+	{
+		GameController.Instance.hasDoneVehicleAnim = false;
+		StartCoroutine("ITranslateVehicleModel");
+	}
+
+	public IEnumerator ITranslateVehicleModel()
+	{
+		transform.position = Vector3.zero;
+		while (transform.position.z < targetZValue)
+		{
+			transform.Translate(Vector3.forward * 75f * Time.deltaTime, Space.World);
+			yield return null;
+		}
+		GameController.Instance.hasDoneVehicleAnim = true;
+		StopCoroutine("ITranslateVehicleModel");
 	}
 
 	public void ToggleFXFury(ParticleSystem[] ps, bool b)

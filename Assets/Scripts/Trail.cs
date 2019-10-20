@@ -14,7 +14,7 @@ public class Trail : MonoBehaviour
 	void Start()
 	{
 		_sectionController = SectionController.Instance;
-		_defaultParent = transform.parent;
+		_defaultParent = transform.parent.parent;
 	}
 
 	public void Activate(Vector3 _pos)

@@ -29,4 +29,10 @@ public class EventManager : MonoBehaviour
 
 	public delegate void StateEvents(State s);
 	public static StateEvents OnStateChange;
+
+
+	public delegate void PurchaseableVehicleEvents(PurchaseableVehicle v);
+	public static PurchaseableVehicleEvents OnVehicleActive;
+	public static PurchaseableVehicleEvents OnVehiclePurchase;
+
 }

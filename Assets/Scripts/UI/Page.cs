@@ -10,6 +10,7 @@ public enum PageType
 	Menu,
 	Complete,
 	GameOver,
+	Store,
 }
 [RequireComponent(typeof(CanvasGroup))]
 public class Page : MonoBehaviour

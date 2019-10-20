@@ -8,9 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public float onHoldBrakePower = 800;
     public float frictionBrake = 100;
     public ParticleSystem fx_explosion;
-    public Trail fx_trail;
     public bool isAlive = true;
     public Section currentSection;
+    public PurchaseableVehicle[] playerModels;
+    public GameObject gameCamera;
 
     [Header("Fields")]
     public ProgressMeter furyMeter;
@@ -20,19 +21,42 @@ public class PlayerMovement : MonoBehaviour
     private float _flickTimer;
     private int _flickCount;
     private int _zone;
+    private float _initialVelocity;
 
     private float _fury;
 
     private Vector3 _defaultPos;
     private Quaternion _defaultRot;
+
+    void Awake()
+    {
+        for (int i = 0; i < playerModels.Length; i++)
+        {
+            playerModels[i].Init();
+        }
+
+        int activeVehicleId = PlayerPrefs.HasKey("ACTIVE_VEHICLE_ID") ? PlayerPrefs.GetInt("ACTIVE_VEHICLE_ID") : 0;
+        if (!playerModels[activeVehicleId].IsPurchased)
+        {
+            activeVehicleId = 0;
+        }
+        PurchaseableVehicle.SetActiveVehicle(playerModels[activeVehicleId]);
+    }
     void Start ()
     {
         FuryAchieved = false;
         _sectionController = SectionController.Instance;
         _zone = LevelController.Instance.Zone;
-        maxVelocity = _zone == 4 ? 175f : 100f;
+        _initialVelocity = _zone == 4 ? 175f : 100f;
         _defaultPos = transform.position;
         _defaultRot = transform.rotation;
+
+
+
+
+        switchVehicleModel();
+        playerModels[PurchaseableVehicle.active.GetIndex()].transform.GetChild(0).GetComponent<PlayerModel>().TranslateVehicle();
+
     }
 
     void OnEnable ()
@@ -41,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
         EventManager.OnSectionTriggerHit += OnSectionTriggerHit;
         EventManager.OnGameEvent += OnGameEvent;
         FlickInput.OnUp += OnUp;
+        EventManager.OnVehicleActive += OnVehicleActive;
+        EventManager.OnStateChange += OnStateChange;
     }
 
     void OnDisable ()
@@ -50,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
         EventManager.OnSectionTriggerHit -= OnSectionTriggerHit;
         EventManager.OnGameEvent -= OnGameEvent;
         FlickInput.OnUp -= OnUp;
+        EventManager.OnVehicleActive -= OnVehicleActive;
+        EventManager.OnStateChange -= OnStateChange;
     }
 
     void OnUp()
@@ -57,14 +85,15 @@ public class PlayerMovement : MonoBehaviour
         if (_sectionController.Velocity >= maxVelocity && !FuryAchieved)
         {
             AudioController.Instance.Play(SFX.CAR_BRAKE);
-            fx_trail.Activate(transform.GetChild(0).transform.position);
-
+            PurchaseableVehicle.active.FX_Trail.Activate(transform.GetChild(PurchaseableVehicle.active.GetIndex()).GetChild(0).transform.position);
         }
     }
 
     void OnDown ()
     {
-        if (_isFinished) { return; }
+        if (_isFinished) {
+            return;
+        }
         // if (GameController.Instance.state != State.Game)
         // {
         //     GameController.Instance.SetState(State.Game);
@@ -74,6 +103,59 @@ public class PlayerMovement : MonoBehaviour
         {
             CameraController.Instance.SetPosition (-Vector3.forward);
         }
+    }
+
+    void OnVehicleActive(PurchaseableVehicle v)
+    {
+        switchVehicleModel();
+        switch (v.ID)
+        {
+            case ObjectID.Cop:
+            {
+                break;
+            }
+
+            case ObjectID.GarbageTruck:
+            {
+                break;
+            }
+            case ObjectID.Ambo:
+            {
+
+                break;
+            }
+        }
+
+    }
+
+    void OnStateChange(State s)
+    {
+        if (s == State.Store)
+        {
+            gameCamera.SetActive(false);
+            return;
+        }
+
+        gameCamera.SetActive(true);
+        switch (s)
+        {
+            case State.Menu:
+            {
+                switchVehicleModel();
+                playerModels[PurchaseableVehicle.active.GetIndex()].transform.GetChild(0).GetComponent<PlayerModel>().TranslateVehicle();
+                break;
+            }
+        }
+    }
+
+    private void switchVehicleModel()
+    {
+        for (int i = 0; i < playerModels.Length; i++)
+        {
+            playerModels[i].transform.gameObject.SetActive(false);
+        }
+
+        playerModels[PurchaseableVehicle.active.GetIndex()].transform.gameObject.SetActive(true);
     }
 
     void OnSectionTriggerHit ()
@@ -165,10 +247,11 @@ public class PlayerMovement : MonoBehaviour
     void Update ()
     {
         if (!isAlive || GameController.Instance.state != State.Game) { return; }
+        maxVelocity = _initialVelocity * PurchaseableVehicle.active.SpeedMult;
 
-        if (fx_trail.CanSetParent && _sectionController.Velocity > 0)
+        if ( PurchaseableVehicle.active.FX_Trail.CanSetParent && _sectionController.Velocity > 0)
         {
-            fx_trail.transform.SetParent(currentSection.transform);
+            PurchaseableVehicle.active.FX_Trail.transform.SetParent(currentSection.transform);
         }
 
         if (!_furyAchieved)

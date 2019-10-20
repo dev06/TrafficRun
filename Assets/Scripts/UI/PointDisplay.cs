@@ -70,7 +70,7 @@ public class PointDisplay : MonoBehaviour
 			GameController.Score += 20;
 			Haptic.Vibrate (HapticIntensity.Light);
 			animations[index].Play ();
-			texts[index].text = "Near Miss!";
+			texts[index].text = "Near Miss!\nx2";
 			index++;
 			if (index > animations.Count - 1)
 			{
@@ -80,7 +80,8 @@ public class PointDisplay : MonoBehaviour
 		{
 			texts[index].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Random.Range(-15f, 15f)));
 			animations[index].Play ();
-			texts[index].text = "Hit!";
+			texts[index].text = "Hit!\nx2";
+			GameController.Score += 20;
 			index++;
 			if (index > animations.Count - 1)
 			{

@@ -16,6 +16,13 @@ public enum ButtonID
 	B_Continue,
 	B_Play,
 	B_Audio,
+	B_Back,
+	B_Store,
+
+	P_Cop,
+	P_GarbageTruck,
+	P_Ambo,
+	P_FireTruck,
 }
 
 public class ButtonEventHandler : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler

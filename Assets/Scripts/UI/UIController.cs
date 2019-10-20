@@ -5,8 +5,11 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
 	public static UIController Instance;
-
 	public Component[] pages;
+
+	public delegate void PageEvents(PageType p);
+	public static PageEvents OnPageShown;
+
 	void Awake()
 	{
 		if (Instance == null)
@@ -26,6 +29,10 @@ public class UIController : MonoBehaviour
 	{
 		TogglePagesOff();
 		TogglePage(type);
+		if (OnPageShown != null)
+		{
+			OnPageShown(type);
+		}
 	}
 
 	private void TogglePage(PageType type)
