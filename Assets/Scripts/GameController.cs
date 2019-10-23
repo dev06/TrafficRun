@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using GameAnalyticsSDK;
 public enum State
 {
 	Menu,
@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour
 			Instance = this;
 		}
 
+		GameAnalytics.Initialize();
 		Load ();
 	}
 

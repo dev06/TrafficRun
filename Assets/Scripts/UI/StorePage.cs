@@ -28,7 +28,7 @@ public class StorePage : Page
 		{
 			Toggle (true);
 			goldText.text = "x" + GameController.Instance.Gold;
-			for (int i = 0; i < buttons.childCount; i++)
+			for (int i = 0; i < buttons.childCount - 1; i++)
 			{
 				buttons.GetChild(i).GetComponent<PurchaseButton>().updateData();
 			}
@@ -37,7 +37,7 @@ public class StorePage : Page
 
 	void OnVehiclePurchase(PurchaseableVehicle v)
 	{
-		for (int i = 0; i < buttons.childCount; i++)
+		for (int i = 0; i < buttons.childCount - 1; i++)
 		{
 			buttons.GetChild(i).GetComponent<PurchaseButton>().updateData();
 		}
